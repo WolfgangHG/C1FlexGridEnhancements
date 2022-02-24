@@ -27,6 +27,7 @@ Same for a left border: create a style with only a right border ("Border.Directi
 To simplify this, this sample contains a helper class "C1FlexGridBorderPainter".
 
 The result looks like this:
+
 ![BorderPainter](borderpainter.png)
 
 ## Usage of "C1FlexGridBorderPainter"
