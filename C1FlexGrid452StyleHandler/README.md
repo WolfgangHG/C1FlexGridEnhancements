@@ -25,6 +25,16 @@ The result looks like this:
 
 ![StyleHandler](stylehandler.png)
 
+The style handler can handle those formattings:
+* ForeColor
+* BackColor
+* Borders (style, width, color)
+* Font
+* TextAlign
+* WordWrap
+* ImageAlign
+* TextDirection
+
 ## How the style handler works
 The StyleHandler is just a helper class to create CellStyle objects based on a formatting.
 It calculates style names based on the formatting information, checks whether a style with this name is already
@@ -32,7 +42,7 @@ contained in the grid, and adds it if not.
 
 The style names have this structure:
 ~~~~
-<StyleElementFlags enum as integer>/<BackColor>/<BorderColor>/<BorderDirection>/<BorderStyle>/<BorderWidth>/<FontName>[Size]<FontStyle>/<TextAlignEnum as int>/<WordWrap>/<ImageAlignEnum as int>/<TextDirectionEnum as int>
+<StyleElementFlags enum as integer>/<BackColor>/<BorderColor>/<BorderDirection>/<BorderStyle>/<BorderWidth>/<FontName>[Size]<FontStyle>/<ForeColor>/<TextAlignEnum as int>/<WordWrap>/<ImageAlignEnum as int>/<TextDirectionEnum as int>
 ~~~~
 
 Only the modified values are contained in the string, so that it is much shorter if only the ForeColor is set.
