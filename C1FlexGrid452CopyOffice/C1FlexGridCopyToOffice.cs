@@ -484,8 +484,8 @@ namespace C1FlexGrid452CopyOffice
                 intColWidth += _c1FlexGrid.Cols[intColInRange].WidthDisplay;
               }
             }
-            bool todo_Testen;
-            //Aus Excel heraus kopieren: da kommt noch ein Style-Attribut mit. Das lassen wir hier weg.
+            
+            //Copying from excel: this creates an additional style attribute. But it is not necessary, and pasting the column width does not work anyway.
             //_sbHTML.Append(" width=" + intColWidth + " style ='width:" + intColWidth + "pt;'");
             _sbHTML.Append(" width=" + intColWidth);
 
