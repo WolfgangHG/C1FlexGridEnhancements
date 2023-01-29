@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C1.Win.C1FlexGrid">
-      <Version>4.5.20213.539</Version>
+      <Version>4.5.20223.588</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

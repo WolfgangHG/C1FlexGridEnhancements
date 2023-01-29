@@ -1,4 +1,4 @@
-﻿using C1.Win.C1FlexGrid;
+﻿using C1.Win.FlexGrid;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace C1FlexGrid452CopyOffice
+namespace C1FlexGrid6CopyOffice
 {
   /// <summary>
   /// This utility class copies C1FlexGrid content to the clipboard in HTML format so that it can be pasted to Office.

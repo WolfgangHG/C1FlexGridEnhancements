@@ -1,6 +1,8 @@
-# C1FlexGrid enhancements: StyleHandler
+# C1FlexGrid enhancements: StyleHandler (.NET 4.5.2)
 
 This sample contains a helper class that simplies cell formatting of a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
+
+This sample uses the C1 dlls for .NET 4.5.2. A version for .NET6 is here: [C1FlexGrid6StyleHandler](/C1FlexGrid6StyleHandler)
 
 Normally, you set e.g. the BackColor of a cell this way:
 

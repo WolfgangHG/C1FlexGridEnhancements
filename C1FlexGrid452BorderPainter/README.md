@@ -1,6 +1,8 @@
-# C1FlexGrid enhancements: BorderPainter
+# C1FlexGrid enhancements: BorderPainter (.NET 4.5.2)
 
 This sample shows a way to define custom borders in a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
+
+This sample uses the C1 dlls for .NET 4.5.2. A version for .NET6 is here: [C1FlexGrid6BorderPainter](/C1FlexGrid6BorderPainter)
 
 Normally, you create borders this way:
 
@@ -24,7 +26,9 @@ You have to set the style to each single cell.
 The border applies only to the right/bottom border of a cell. To create a top border, you have to create a style with only bottom border ("Border.Direction = BorderDirEnum.Horizontal") and set this style to the cell above the current cell.
 Same for a left border: create a style with only a right border ("Border.Direction = BorderDirEnum.Vertical") and set this style to the cell left to the current cell.
 
-To simplify this, this sample contains a helper class "C1FlexGridBorderPainter".
+This approach has the limitation that you cannot use different border types for left and bottom border of the cell.
+
+To simplify this (and overcome the limitation), this sample contains a helper class "C1FlexGridBorderPainter".
 
 The result looks like this:
 
