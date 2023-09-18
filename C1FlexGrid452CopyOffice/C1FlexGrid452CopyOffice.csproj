@@ -136,10 +136,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="C1FlexGrid452CopyOffice.gclicx" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C1.Win.C1FlexGrid">
-      <Version>4.5.20223.588</Version>
+      <Version>4.5.20232.611</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
