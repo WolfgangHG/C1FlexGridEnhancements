@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C1FlexGrid6CopyOffice", "C1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C1FlexGrid6StyleHandler", "C1FlexGrid6StyleHandler\C1FlexGrid6StyleHandler.csproj", "{37F34521-AE6E-43C0-B7CF-0FC00465DD1F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C1FlexGrid6CalendarSheet", "C1FlexGrid6CalendarSheet\C1FlexGrid6CalendarSheet.csproj", "{70720D2B-35CA-40C6-9F85-3195090B01FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{37F34521-AE6E-43C0-B7CF-0FC00465DD1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37F34521-AE6E-43C0-B7CF-0FC00465DD1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37F34521-AE6E-43C0-B7CF-0FC00465DD1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70720D2B-35CA-40C6-9F85-3195090B01FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70720D2B-35CA-40C6-9F85-3195090B01FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70720D2B-35CA-40C6-9F85-3195090B01FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70720D2B-35CA-40C6-9F85-3195090B01FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
