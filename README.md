@@ -15,3 +15,7 @@ by using styles
 The samples [Copy to Office (.NET 4.5.2)](/C1FlexGrid452CopyOffice) and [Copy to Office (.NET 6)](/C1FlexGrid6CopyOffice) contain a helper class that shows how to write the C1FlexGrid 
 content to the clipboard so that it can be pasted to Word/Excel/Outlook and the formatting is kept.  
 The same code can also be used to export a C1FlexGrid to Html.
+
+## Calendar sheet
+The sample [Calendar sheet (.NET 6)](/C1FlexGrid6CalendarSheet) shows how to render a calendar table with month rows and day columns
+and select date ranges, which requires a bar selection instead of the rectangle selection of C1FlexGrid.

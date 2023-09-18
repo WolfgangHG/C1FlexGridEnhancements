@@ -30,7 +30,7 @@ The main problem is to calculate the currently selected dates: the start and end
 all cells that are between those two date values have to be rendered as "highligted". And if the selection starts in a month with less than 31 days, the remaining
 empty cells should be rendered "highlighted", too.
 
-But selections are not always from top to down, and this causes problems when querying the selection range from C1FlexGrid using the property "Selection":
+But selections are not always from top/left to bottom/right, and this causes problems when querying the selection range from C1FlexGrid using the property "Selection":
 this CellRange is normalized, so that it starts at the top left cell and ends at the bottom right cell. In my second sample, this means that the user has 
 dragged a selection rectangle as show in this screenshot:
 ![From end of month to start of next](images/over_month_border_with_gap_selection.png)
