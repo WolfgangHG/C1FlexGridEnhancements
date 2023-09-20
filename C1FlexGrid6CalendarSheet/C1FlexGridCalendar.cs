@@ -106,6 +106,12 @@ namespace C1FlexGrid6CalendarSheet
         return base.IsCellHighlighted(row, col);
       }
 
+      if (row == this.Row && col == this.Col)
+      {
+        //Focused cell: render as "Selected", so use default code.
+        return base.IsCellHighlighted(row, col);
+      }
+
       DateRange selectedDateRange = this.GetSelectedDateRange();
       
       if (selectedDateRange == null)
