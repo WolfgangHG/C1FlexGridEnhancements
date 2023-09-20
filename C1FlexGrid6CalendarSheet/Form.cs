@@ -10,11 +10,10 @@ namespace C1FlexGrid6CalendarSheet
     {
       InitializeComponent();
 
+      this.dateTimePickerFrom.Value = new DateTime(DateTime.Now.Year, 1, 1);
+      //set it to first day of month. Otherwise, spinning the month might return broken values when the month has fewer than 31 days.
+      this.dateTimePickerTo.Value = new DateTime(DateTime.Now.Year, 12, 1);
 
-      this.c1FlexGrid1.RenderCalendar(new DateTime(2023, 1, 1), new DateTime(2024, 12, 31));
-
-      //Set fixed style after filling the grid. Does not seem to work befor any column info is set:
-      this.c1FlexGrid1.Styles.Fixed.BackColor = SystemColors.Control;
     }
 
     private void buttonShowSelection_Click(object sender, EventArgs e)
@@ -30,6 +29,26 @@ namespace C1FlexGrid6CalendarSheet
       {
         MessageBox.Show(this, $"Current Selection: nothing!");
       }
+    }
+
+    private void dateTimePickerFrom_ValueChanged(object sender, EventArgs e)
+    {
+      this.RenderCalendar();
+    }
+
+    private void dateTimePickerTo_ValueChanged(object sender, EventArgs e)
+    {
+      this.RenderCalendar();
+    }
+
+    /// <summary>
+    /// Refills the calendar sheet based on the currently selected date range.
+    /// </summary>
+    private void RenderCalendar()
+    {
+      //The method ignores the day part, so don't care here.
+      this.c1FlexGrid1.RenderCalendar(this.dateTimePickerFrom.Value, this.dateTimePickerTo.Value);
+
     }
   }
 }

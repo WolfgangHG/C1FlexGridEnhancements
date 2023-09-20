@@ -20,14 +20,15 @@ It gets interesting when selecting a range from a date in one month to the date 
 You can also select a range including a full month:
 ![Full month](images/over_month_border_without_gap.png)
 
-This sample shows how to cheat C1FlexGrid into rendering cells as "selected" that are not part of the current selection, and render selected cells as "unselected". 
+## Implementation details
+This sample "cheats" C1FlexGrid into rendering cells as "selected" that are not part of the current selection, and render selected cells as "unselected". 
 This is achieved by overriding the method `bool IsCellHighlighted(int row, int col)`: it returns true if the cell should be rendered as highlighted.
-Same is done for column headers: if the grid has set a style "SelectedColumnHeader" and "SelectedRowHeader", the header cells that match the highlighted cell 
+Same is done for column headers: if the grid has set a style "SelectedColumnHeader", the header cells that match the highlighted cell 
 must be modified by overriding bool `IsCellSelectedColumnHeader(int row, int col)`.
 
 
 The main problem is to calculate the currently selected dates: the start and end cell of the selection define the start and end date of the selection. So
-all cells that are between those two date values have to be rendered as "highligted". And if the selection starts in a month with less than 31 days, the remaining
+all cells that are between those two date values have to be rendered as "highlighted". And if the selection starts in a month with less than 31 days, the remaining
 empty cells should be rendered "highlighted", too.
 
 But selections are not always from top/left to bottom/right, and this causes problems when querying the selection range from C1FlexGrid using the property "Selection":

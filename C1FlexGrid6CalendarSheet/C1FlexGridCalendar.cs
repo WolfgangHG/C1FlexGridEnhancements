@@ -19,6 +19,11 @@ namespace C1FlexGrid6CalendarSheet
     private DateTime dateFrom;
     private DateTime dateTo;
 
+    /// <summary>
+    /// Index of first day column.
+    /// </summary>
+    private const int COL_FIRST_DAY = 2;
+
     public C1FlexGridCalendar()
     {
       InitializeComponent();
@@ -27,17 +32,24 @@ namespace C1FlexGrid6CalendarSheet
       this.AllowSorting = C1.Win.FlexGrid.AllowSortingEnum.None;
       this.AllowEditing = false;
 
+      //Allow merging in fixed column (year):
+      this.AllowMergingFixed = AllowMergingEnum.FixedOnly;
 
       //Setting Fixed BackColor does not work here...
-      //this.Styles.Fixed.BackColor = SystemColors.Control;
+      this.Styles.Fixed.BackColor = SystemColors.Control;
 
       this.Styles.SelectedRowHeader.BackColor = Color.Green;
       this.Styles.SelectedColumnHeader.BackColor = Color.Green;
     }
 
-
+    /// <summary>
+    /// Fills the grid with the months according to the date range.
+    /// </summary>
+    /// <param name="from">From date. Only the month/year part is used.</param>
+    /// <param name="to">To date. Only the month/year part is used.</param>
     public void RenderCalendar (DateTime from, DateTime to)
     {
+      //If "to" is before "from", switch to 
       //Set to first day/last day of month if different:
       this.dateFrom = new DateTime(from.Year, from.Month, 1);
       this.dateTo = new DateTime(to.Year, to.Month, DateTime.DaysInMonth(to.Year, to.Month));
@@ -46,31 +58,33 @@ namespace C1FlexGrid6CalendarSheet
       this.Rows.Count = 1 + monthCount;
       this.Rows.Fixed = 1;
       
-      this.Cols.Count = 32;
-      this.Cols.Fixed = 1;
+      //2 fixed columns, 31 day columns
+      this.Cols.Count = 33;
+      this.Cols.Fixed = 2;
 
       this.Cols[0].Width = 100;
       for (int day = 1; day <= 31; day++)
       {
-        this.Cols[day].Width = 25;
+        this.Cols[GetColFromDay(day)].Width = 25;
       }
 
       //Header row: day numbers:
       for (int day = 1; day <= 31; day++)
       {
-        this[0, day] = day;
+        this[0, GetColFromDay(day)] = day;
       }
 
       for (int month = 1; month <= monthCount; month++)
       {
         //Month is 1 based. So subtract 1 to add it to the start date:
         DateTime firstDayOfCurrentMonth = this.dateFrom.AddMonths(month - 1);
-        this[month, 0] = firstDayOfCurrentMonth.ToString("MMMM");
+        this[month, 0] = firstDayOfCurrentMonth.Year;
+        this[month, 1] = firstDayOfCurrentMonth.ToString("MMMM");
 
         //Days in Month:
         for (int day = 1; day <= DateTime.DaysInMonth(firstDayOfCurrentMonth.Year, firstDayOfCurrentMonth.Month); day++)
         {
-          this[month, day] = new DateTime(firstDayOfCurrentMonth.Year, firstDayOfCurrentMonth.Month, day).ToString("ddd");
+          this[month, GetColFromDay(day)] = new DateTime(firstDayOfCurrentMonth.Year, firstDayOfCurrentMonth.Month, day).ToString("ddd");
 
         }
       }
@@ -136,12 +150,22 @@ namespace C1FlexGrid6CalendarSheet
       {
         return base.IsCellSelectedColumnHeader(row, col);
       }
+      //Fixed columns: do nothing here:
+      if (col < this.Cols.Fixed)
+      {
+        return base.IsCellSelectedColumnHeader(row, col);
+      }
 
       DateRange selectedDateRange = this.GetSelectedDateRange();
       if (selectedDateRange == null)
       {
+        //This might happen, if the col is not in a valid date range.
+        //We could also grid default, but this looks strange, as no date is selected.
+        //return base.IsCellSelectedColumnHeader(row, col);
         return false;
       }
+
+      int day = GetDayFromCol(col);
 
       //"col" is the day of month. Check whether the selection contains this day.
       if ((selectedDateRange.End.Month - selectedDateRange.Start.Month) > 1)
@@ -152,13 +176,13 @@ namespace C1FlexGrid6CalendarSheet
       else if ((selectedDateRange.End.Month - selectedDateRange.Start.Month) == 1)
       {
         //Single month break: 
-        return (col >= selectedDateRange.Start.Day || col <= selectedDateRange.End.Day);
+        return (day >= selectedDateRange.Start.Day || day <= selectedDateRange.End.Day);
 
       }
       else
       {
         //Inside single month:
-        return (col >= selectedDateRange.Start.Day && col <= selectedDateRange.End.Day);
+        return (day >= selectedDateRange.Start.Day && day <= selectedDateRange.End.Day);
       }
     }
 
@@ -219,50 +243,50 @@ namespace C1FlexGrid6CalendarSheet
       //"Row" = start row of selection, "RowSel" = current cursor row.
 
       //Different ways to create a selection by mouse: 
-      if (this.RowSel > this.Row && this.ColSel > this.Col)
+      if (this.RowSel >= this.Row && this.ColSel >= this.Col)
       {
-        //selection down and to the right (default selection):
+        //single cell or selection in same row to the right or selection down and to the right (default selection):
         rowMonthStart = this.Row;
-        dayStart = this.Col;
+        dayStart = GetDayFromCol(this.Col);
 
         rowMonthEnd = this.RowSel;
-        dayEnd = this.ColSel;
+        dayEnd = GetDayFromCol(this.ColSel);
       }
       else if (this.RowSel > this.Row && this.ColSel < this.Col)
       {
         //Selection down and to the left: 
         rowMonthStart = this.Row;
-        dayStart = this.Col;
+        dayStart = GetDayFromCol(this.Col);
 
         rowMonthEnd = this.RowSel;
-        dayEnd = this.ColSel;
+        dayEnd = GetDayFromCol(this.ColSel);
       }
       else if (this.RowSel <= this.Row && this.ColSel  < this.Col)
       {
         //Move mouse cursor up (or same row) and to the left:
         rowMonthStart = this.RowSel;
-        dayStart = this.ColSel;
+        dayStart = GetDayFromCol(this.ColSel);
 
         rowMonthEnd = this.Row;
-        dayEnd = this.Col;
+        dayEnd = GetDayFromCol(this.Col);
       }
       else if (this.RowSel < this.Row && this.ColSel >= this.Col)
       {
         //Move cursor up and to the right (or same col):
         rowMonthStart = this.RowSel;
-        dayStart = this.ColSel;
+        dayStart = GetDayFromCol(this.ColSel);
 
         rowMonthEnd = this.Row;
-        dayEnd = this.Col;
+        dayEnd = GetDayFromCol(this.Col);
       }
       else
       {
-        //Single cell?!
+        //Should probably never happen, all combinations are covered by previous conditions....
         rowMonthStart = this.Row;
-        dayStart = this.Col;
+        dayStart = GetDayFromCol(this.Col);
 
         rowMonthEnd = this.RowSel;
-        dayEnd = this.ColSel;
+        dayEnd = GetDayFromCol(this.ColSel);
       }
 
       int yearStart, monthStart;
@@ -275,6 +299,12 @@ namespace C1FlexGrid6CalendarSheet
       int daysInMonthStart = DateTime.DaysInMonth(yearStart, monthStart);
       if (dayStart > daysInMonthStart)
       {
+        //Special case: if selection is a single cell beyond the end of the month, then do nothing.
+        if (yearStart == yearEnd && monthStart == monthEnd && dayEnd > daysInMonthStart)
+        {
+          return null;
+        }
+
         ++monthStart;
         dayStart = 1;
         //Wrap year if month goes beyound december. This should not happen here, as december has 31 days.
@@ -301,6 +331,26 @@ namespace C1FlexGrid6CalendarSheet
     }
 
     /// <summary>
+    /// Converts a grid column index to a day index: subtract the fixed column count and add "1", as the day is 1 based.
+    /// </summary>
+    /// <param name="col"></param>
+    /// <returns></returns>
+    private int GetDayFromCol(int col)
+    {
+      return col - COL_FIRST_DAY + 1;
+    }
+
+    /// <summary>
+    /// Converts a a day index to a grid column index: add the fixed column count and subtract "1", as the day is 1 based.
+    /// </summary>
+    /// <param name="col"></param>
+    /// <returns></returns>
+    private int GetColFromDay(int day)
+    {
+      return day + COL_FIRST_DAY - 1;
+    }
+
+    /// <summary>
     /// Get date for cell. Returns null of cell is no valid date (fixed or end of a month with less than 31 days)
     /// </summary>
     /// <param name="row"></param>
@@ -308,21 +358,22 @@ namespace C1FlexGrid6CalendarSheet
     /// <returns></returns>
     private DateTime? GetDate(int row, int col)
     {
-      if (row >= 1 && col >= 1)
+      if (row >= 1 && col >= COL_FIRST_DAY)
       {
         //"row" = month.
         int year, month;
         GetYearMonthFromRow(row, out year, out month);
 
         int daysInMonth = DateTime.DaysInMonth(year, month);
-        if (col > daysInMonth)
+        int day = GetDayFromCol(col);
+        if (day > daysInMonth)
         {
           //Month has fewer days: return end of month???? 
           return null;
         }
         else
         {
-          return new DateTime(year, month, col);
+          return new DateTime(year, month, day);
         }
       }
       else
