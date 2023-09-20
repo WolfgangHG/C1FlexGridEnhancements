@@ -42,7 +42,7 @@ it would result in a completely different date range:
 Fortunately, the property "Row/Col" contains the currently focused cell and "RowSel/ColSel" contains the cell where the user started selection, without normalization.
 Two different combinations with two variations are possible:
 
-* RowSel > Row and ColSel > Col: this is the easiest selection down and to the right: start month is in "Row", start day in "Col", end month in "RowSel" and end day in "ColSel".
+* RowSel >= Row and ColSel >= Col: this is the easiest selection: single cell or selection in same row to the right or selection down and to the right: start month is in "Row", start day in "Col", end month in "RowSel" and end day in "ColSel".
 It works also if the selection spans multiple rows.
 * RowSel > Row and ColSel < Col: selection goes down and to the left: same as in previous selection.
 * RowSel <= Row and ColSel < Col: the selection goes up (or in the same row) and to the left: start month is in "RowSel", start day in "ColSel", end month in "Row" and end day in "Col".
