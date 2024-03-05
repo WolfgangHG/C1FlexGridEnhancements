@@ -86,7 +86,10 @@ namespace C1FlexGrid6StyleHandler
     private static ImageAlignEnum IMAGE_ALIGN_UNSPECIFIED = ImageAlignEnum.CenterCenter;
     /// <summary>If no "TextDirection" value needs to be specified by a set operation use this value </summary>
     private static TextDirectionEnum TEXT_DIRECTION_UNSPECIFIED = TextDirectionEnum.Normal;
-
+    /// <summary>
+    /// If no "Format" value needs to be specified by a set operation, then use this value
+    /// </summary>
+    private static string FORMAT_UNSPECIFIED = null;
     #endregion
 
     #region Constructors
@@ -148,6 +151,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified back color.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_backColor"></param>
+    public void MergeBackColor(int _intRow, string _strCol, Color _backColor)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Let the cell range method do the work:
+      this.MergeBackColor(_intRow, intCol, _intRow, intCol, _backColor);
+    }
+
+    /// <summary>
     /// Set the Back Color to a cell range.
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -160,7 +176,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor,
         _backColor,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -176,7 +192,7 @@ namespace C1FlexGrid6StyleHandler
     {
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor,
         _backColor, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -194,6 +210,21 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cells in the range and merge them with the specified back and fore color.
+    /// Then sets the style to the whole cell range.
+    /// </summary>
+    /// <param name="_intRow1"></param>
+    /// <param name="_strCol1"></param>
+    /// <param name="_backColor"></param>
+    /// <param name="_foreColor"></param>
+    public void MergeBackForeColor(int _intRow1, string _strCol1, Color _backColor, Color _foreColor)
+    {
+      int intCol = this.flexGrid.Cols[_strCol1].Index;
+      //Use common "MergeStyle" method.
+      this.MergeBackForeColor(_intRow1, intCol, _intRow1, intCol, _backColor, _foreColor);
+    }
+
+    /// <summary>
     /// Takes the style information from the cell cells in the range and merge them with the specified back and fore color.
     /// Then sets the style to the whole cell range.
     /// </summary>
@@ -205,12 +236,10 @@ namespace C1FlexGrid6StyleHandler
     /// <param name="_foreColor"></param>
     public void MergeBackForeColor(int _intRow1, int _intCol1, int _intRow2, int _intCol2, Color _backColor, Color _foreColor)
     {
-      //this.MergeBackForeColor (CellStyleEnum.Normal, _intRow1, _intCol1, _intRow2, _intCol2, _backColor, _foreColor);
-
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor | StyleElementFlags.ForeColor,
         _backColor, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -227,7 +256,7 @@ namespace C1FlexGrid6StyleHandler
       //Use the "allover" method, and set only the back and fore color (all other fields can have their defaults).
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor | StyleElementFlags.ForeColor,
         _backColor, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -253,7 +282,7 @@ namespace C1FlexGrid6StyleHandler
         StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.BackColor; //"XOR" entfernt hier die BackColor.
         this.SetStyle(cellStyle, _intRow, _intCol, styleElemFlagsNew, COLOR_UNSPECIFIED,
           cellStyle.Border.Color, cellStyle.Border.Direction, cellStyle.Border.Style, cellStyle.Border.Width,
-          cellStyle.Font, cellStyle.ForeColor, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection);
+          cellStyle.Font, cellStyle.ForeColor, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection, cellStyle.Format);
       }
     }
     #endregion
@@ -289,6 +318,21 @@ namespace C1FlexGrid6StyleHandler
       this.MergeBorder(_intRow, _intCol, _intRow, _intCol, _borderColor, _borderDirection, _borderStyle, _intBorderWidth);
     }
 
+    /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_borderColor"></param>
+    /// <param name="_borderDirection"></param>
+    /// <param name="_borderStyle"></param>
+    /// <param name="_intBorderWidth"></param>
+    public void MergeBorder(int _intRow, string _strCol, Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeBorder(_intRow, intCol, _intRow, intCol, _borderColor, _borderDirection, _borderStyle, _intBorderWidth);
+    }
 
     /// <summary>
     /// Set the Border to a cell RANGE, all other values are based on the specified base style.
@@ -307,7 +351,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Border,
         COLOR_UNSPECIFIED,
         _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -326,7 +370,7 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Border,
         COLOR_UNSPECIFIED, _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
 
@@ -355,6 +399,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified font.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_font"></param>
+    public void MergeFont(int _intRow, string _strCol, Font _font)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method.
+      this.MergeFont(_intRow, intCol, _intRow, intCol, _font);
+    }
+
+    /// <summary>
     /// Set the Back Color to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -368,7 +425,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Font,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        _font, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        _font, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     /// <summary>
     /// Takes the style information from the cell at (col 1/row 1) and merges it with the specified font.
@@ -383,7 +440,7 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Font,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        _font, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        _font, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
 
@@ -405,7 +462,7 @@ namespace C1FlexGrid6StyleHandler
         StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.Font; //"XOR" entfernt hier die Font.
         this.SetStyle(cellStyle, _intRow, _intCol, styleElemFlagsNew, cellStyle.BackColor,
           cellStyle.Border.Color, cellStyle.Border.Direction, cellStyle.Border.Style, cellStyle.Border.Width,
-          FONT_UNSPECIFIED, cellStyle.ForeColor, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection);
+          FONT_UNSPECIFIED, cellStyle.ForeColor, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection, cellStyle.Format);
       }
     }
     #endregion
@@ -435,6 +492,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified fore color.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_foreColor"></param>
+    public void MergeForeColor(int _intRow, string _strCol, Color _foreColor)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeForeColor(_intRow, intCol, _intRow, intCol, _foreColor);
+    }
+
+    /// <summary>
     /// Set the Fore Color to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -448,7 +518,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ForeColor,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     /// <summary>
     /// Takes the style information from the cell at (col 1/row 1) and merges it with the specified fore color.
@@ -463,7 +533,7 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ForeColor,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -484,7 +554,7 @@ namespace C1FlexGrid6StyleHandler
         StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.ForeColor; //"XOR" entfernt hier die ForeColor.
         this.SetStyle(cellStyle, _intRow, _intCol, styleElemFlagsNew, cellStyle.BackColor,
           cellStyle.Border.Color, cellStyle.Border.Direction, cellStyle.Border.Style, cellStyle.Border.Width,
-          cellStyle.Font, COLOR_UNSPECIFIED, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection);
+          cellStyle.Font, COLOR_UNSPECIFIED, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection, cellStyle.Format);
       }
     }
     #endregion
@@ -514,6 +584,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified TextAlign.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_textAlign"></param>
+    public void MergeTextAlign(int _intRow, string _strCol, TextAlignEnum _textAlign)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeTextAlign(_intRow, intCol, _intRow, intCol, _textAlign);
+    }
+
+    /// <summary>
     /// Set the TextAlign to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -527,7 +610,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextAlign,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, _textAlign, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, _textAlign, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     /// <summary>
     /// Takes the style information from the cell at (col 1/row 1) and merges it with the specified TextAlign.
@@ -542,7 +625,7 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextAlign,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, _textAlign, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, _textAlign, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
 
@@ -571,6 +654,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified WordWrap.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_bolWordWrap">TRUE if text can be wrapped.</param>
+    public void MergeWordWrap(int _intRow, string _strCol, bool _bolWordWrap)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeWordWrap(_intRow, intCol, _intRow, intCol, _bolWordWrap);
+    }
+
+    /// <summary>
     /// Set the WordWrap to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -584,7 +680,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.WordWrap,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, _bolWordWrap, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, _bolWordWrap, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -600,7 +696,7 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.WordWrap,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, _bolWordWrap, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, _bolWordWrap, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
 
@@ -629,6 +725,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified ImageAlign.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_imageAlign"></param>
+    public void MergeImageAlign(int _intRow, string _strCol, ImageAlignEnum _imageAlign)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeImageAlign(_intRow, intCol, _intRow, intCol, _imageAlign);
+    }
+
+    /// <summary>
     /// Set the ImageAlign to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -642,7 +751,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ImageAlign,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, _imageAlign, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, _imageAlign, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -658,7 +767,7 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ImageAlign,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, _imageAlign, TEXT_DIRECTION_UNSPECIFIED);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, _imageAlign, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
 
@@ -687,6 +796,19 @@ namespace C1FlexGrid6StyleHandler
     }
 
     /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified TextAlign.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_textDirection">Text Direction</param>
+    public void MergeTextDirection(int _intRow, string _strCol, TextDirectionEnum _textDirection)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeTextDirection(_intRow, intCol, _intRow, intCol, _textDirection);
+    }
+
+    /// <summary>
     /// Set the TextDirection to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
@@ -700,7 +822,7 @@ namespace C1FlexGrid6StyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextDirection,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, _textDirection);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, _textDirection, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
@@ -716,7 +838,79 @@ namespace C1FlexGrid6StyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextDirection,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
-        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, _textDirection);
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, _textDirection, FORMAT_UNSPECIFIED);
+    }
+    #endregion
+
+    #region Set/Merge Format
+    /// <summary>
+    /// Set the WordWrap to a cell.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_intCol"></param>
+    /// <param name="_strFormat">Format of the cell data.</param>
+    public void SetFormat(int _intRow, int _intCol, string _strFormat)
+    {
+      //Use the cell range method:
+      this.SetFormat(_intRow, _intCol, _intRow, _intCol, _strFormat);
+    }
+
+    /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified WordWrap.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_intCol"></param>
+    /// <param name="_strFormat">Format of the cell data.</param>
+    public void MergeFormat(int _intRow, int _intCol, string _strFormat)
+    {
+      //Use the cell range method:
+      this.MergeFormat(_intRow, _intCol, _intRow, _intCol, _strFormat);
+    }
+
+    /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified WordWrap.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_strFormat">Format of the cell data.</param>
+    public void MergeFormat(int _intRow, string _strCol, string _strFormat)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeFormat(_intRow, intCol, _intRow, intCol, _strFormat);
+    }
+
+    /// <summary>
+    /// Set the WordWrap to a cell range
+    /// </summary>
+    /// <param name="_intRow1"></param>
+    /// <param name="_intCol1"></param>
+    /// <param name="_intRow2"></param>
+    /// <param name="_intCol2"></param>
+    /// <param name="_strFormat">Format of the cell data.</param>
+    public void SetFormat(int _intRow1, int _intCol1, int _intRow2, int _intCol2, string _strFormat)
+    {
+      //Use the "allover" method, and set only the Format (all other fields can have their defaults).
+      this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Format,
+        COLOR_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, _strFormat);
+    }
+
+    /// <summary>
+    /// Takes the style information from the cell at (col 1/row 1) and merges it with the specified WordWrap.
+    /// </summary>
+    /// <param name="_intRow1"></param>
+    /// <param name="_intCol1"></param>
+    /// <param name="_intRow2"></param>
+    /// <param name="_intCol2"></param>
+    /// <param name="_strFormat">Format of the cell data.</param>
+    public void MergeFormat(int _intRow1, int _intCol1, int _intRow2, int _intCol2, string _strFormat)
+    {
+      //Use common "MergeStyle" method.
+      this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Format,
+        COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, _strFormat);
     }
     #endregion
 
@@ -742,11 +936,12 @@ namespace C1FlexGrid6StyleHandler
     /// <param name="_bolWordWrap">TRUE if text can be wrapped.</param>
     /// <param name="_imageAlign">Image Align</param>
     /// <param name="_textDirection">TextDirection</param>
+    /// <param name="_format">Format of cell data</param>
     public void SetStyle(int _intRow1, int _intCol1, int _intRow2, int _intCol2, StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
-      TextDirectionEnum _textDirection)
+      TextDirectionEnum _textDirection, string _format)
     {
       //check params and modify order (loops might fail otherwise)
       if (_intRow1 > _intRow2)
@@ -773,7 +968,7 @@ namespace C1FlexGrid6StyleHandler
 
           this.SetStyle(cellStyle, iIndexRow, iIndexCol, _styleElementFlags, _backColor,
             _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
-            _font, _foreColor, _textAlign, _bolWordWrap, _imageAlign, _textDirection);
+            _font, _foreColor, _textAlign, _bolWordWrap, _imageAlign, _textDirection, _format);
         }
       }
     }
@@ -799,11 +994,12 @@ namespace C1FlexGrid6StyleHandler
     /// <param name="_bolWordWrap">TRUE if text can be wrapped.</param>
     /// <param name="_imageAlign">Image Align</param>
     /// <param name="_textDirection">Text Direction</param>
+    /// <param name="_format">Format of cell data</param>
     public void MergeStyle(int _intRow1, int _intCol1, int _intRow2, int _intCol2, StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
-      TextDirectionEnum _textDirection)
+      TextDirectionEnum _textDirection, string _format)
     {
       //check params and modify order (loops might fail otherwise)
       if (_intRow1 > _intRow2)
@@ -887,6 +1083,7 @@ namespace C1FlexGrid6StyleHandler
           bool bolWordWrapCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.WordWrap) == StyleElementFlags.WordWrap) ? cellStyleCurrent.WordWrap : WORD_WRAP_UNSPECIFIED);
           ImageAlignEnum imageAlignCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.ImageAlign) == StyleElementFlags.ImageAlign) ? cellStyleCurrent.ImageAlign : IMAGE_ALIGN_UNSPECIFIED);
           TextDirectionEnum textDirectionCurrentStyle = (styleElementFlagsCurrentStyle.HasFlag(StyleElementFlags.TextDirection) ? cellStyleCurrent.TextDirection : TEXT_DIRECTION_UNSPECIFIED);
+          string formatCurrentStyle = (styleElementFlagsCurrentStyle.HasFlag(StyleElementFlags.Format) ? cellStyleCurrent.Format : FORMAT_UNSPECIFIED);
 
           if ((_styleElementFlags & StyleElementFlags.BackColor) == StyleElementFlags.BackColor && (_styleElementFlags & StyleElementFlags.ForeColor) == StyleElementFlags.ForeColor)
           {
@@ -894,7 +1091,7 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.BackColor | StyleElementFlags.ForeColor | styleElementFlagsCurrentStyle,
               _backColor,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-              fontCurrentStyle, _foreColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle);
+              fontCurrentStyle, _foreColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           else
           {
@@ -905,7 +1102,7 @@ namespace C1FlexGrid6StyleHandler
               this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.BackColor | styleElementFlagsCurrentStyle,
                 _backColor,
                 borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-                cellStyleCurrent.Font, cellStyleCurrent.ForeColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle);
+                cellStyleCurrent.Font, cellStyleCurrent.ForeColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
             }
             if ((_styleElementFlags & StyleElementFlags.ForeColor) == StyleElementFlags.ForeColor)
             {
@@ -913,7 +1110,7 @@ namespace C1FlexGrid6StyleHandler
               this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.ForeColor | styleElementFlagsCurrentStyle,
                 backColorCurrentStyle,
                 borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-                fontCurrentStyle, _foreColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle);
+                fontCurrentStyle, _foreColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
             }
           }
           if ((_styleElementFlags & StyleElementFlags.Border) == StyleElementFlags.Border)
@@ -922,7 +1119,7 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.Border | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
-              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle);
+              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if ((_styleElementFlags & StyleElementFlags.Font) == StyleElementFlags.Font)
           {
@@ -930,7 +1127,7 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.Font | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-              _font, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle);
+              _font, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
 
           if ((_styleElementFlags & StyleElementFlags.TextAlign) == StyleElementFlags.TextAlign)
@@ -939,7 +1136,7 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.TextAlign | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-              fontCurrentStyle, foreColorCurrentStyle, _textAlign, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle);
+              fontCurrentStyle, foreColorCurrentStyle, _textAlign, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if ((_styleElementFlags & StyleElementFlags.WordWrap) == StyleElementFlags.WordWrap)
           {
@@ -947,7 +1144,7 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.WordWrap | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, _bolWordWrap, imageAlignCurrentStyle, textDirectionCurrentStyle);
+              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, _bolWordWrap, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if ((_styleElementFlags & StyleElementFlags.ImageAlign) == StyleElementFlags.ImageAlign)
           {
@@ -955,7 +1152,7 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.ImageAlign | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, _imageAlign, textDirectionCurrentStyle);
+              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, _imageAlign, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if (_styleElementFlags.HasFlag(StyleElementFlags.TextDirection) == true)
           {
@@ -963,7 +1160,15 @@ namespace C1FlexGrid6StyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.TextDirection | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
-              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, _textDirection);
+              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, _textDirection, formatCurrentStyle);
+          }
+          if (_styleElementFlags.HasFlag(StyleElementFlags.Format) == true)
+          {
+            //Set Format:
+            this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.Format | styleElementFlagsCurrentStyle,
+              backColorCurrentStyle,
+              borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, _format);
           }
           #endregion
         } //End FOR over cols
@@ -993,16 +1198,17 @@ namespace C1FlexGrid6StyleHandler
     /// <param name="_bolWordWrap">TRUE if text can be wrapped.</param>
     /// <param name="_imageAlign">Image Align</param>
     /// <param name="_textDirection">Text Direction</param>
+    /// <param name="_format">Format of cell data</param>
     private void SetStyle(CellStyle _cellStyleBasedOn, int _intRow1, int _intCol1, StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
-      TextDirectionEnum _textDirection)
+      TextDirectionEnum _textDirection, string _format)
     {
       //Create the style name:
       string strStyleName = this.GetStyleString(_styleElementFlags, _backColor,
         _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
-        _font, _foreColor, _textAlign, _bolWordWrap, _imageAlign, _textDirection);
+        _font, _foreColor, _textAlign, _bolWordWrap, _imageAlign, _textDirection, _format);
 
 
       //Is style contained in grid ?
@@ -1046,6 +1252,8 @@ namespace C1FlexGrid6StyleHandler
           cellStyleNew.ImageAlign = _imageAlign;
         if (_styleElementFlags.HasFlag(StyleElementFlags.TextDirection) == true)
           cellStyleNew.TextDirection = _textDirection;
+        if (_styleElementFlags.HasFlag(StyleElementFlags.Format) == true)
+          cellStyleNew.Format = _format;
         #endregion
       }
       else
@@ -1082,12 +1290,13 @@ namespace C1FlexGrid6StyleHandler
     /// <param name="_bolWordWrap">TRUE if text can be wrapped.</param>
     /// <param name="_imageAlign">Image Align</param>
     /// <param name="_textDirection">Text Direction</param>
+    /// <param name="_format">Data format</param>
     /// <returns></returns>
     protected string GetStyleString(StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
-      TextDirectionEnum _textDirection)
+      TextDirectionEnum _textDirection, string _format)
     {
       StringBuilder sb = new StringBuilder(100);
       //First use integer value of the defined fields:
@@ -1147,6 +1356,11 @@ namespace C1FlexGrid6StyleHandler
       {
         sb.Append(STYLENAME_SEPARATOR);
         sb.Append(((int)_textDirection).ToString());
+      }
+      if (_styleElementFlags.HasFlag(StyleElementFlags.Format) == true)
+      {
+        sb.Append(STYLENAME_SEPARATOR);
+        sb.Append(_format);
       }
 
       return sb.ToString();
@@ -1289,56 +1503,14 @@ namespace C1FlexGrid6StyleHandler
     {
       //Font.ToString() is not good because the "Bold" flag is ignored...
 
-      //WKnauf 29.04.2011: "OriginalFontName" seems to be a bit more performant than "Name"...
-      //WKnauf 30.05.2011: Use "Font.Name" if the .NET-Framework version does not support it.
-      //WKnauf 01.02.2013: No backwards compatibility - we MUST have 2.0 SP2
-      //if (C1FlexGridStyleHandler.bolCanUseFontOriginalName == true)
-      //{
-      //WKnauf 30.05.2011: Sicherheitscheck -> könnte NULL sein (z.B. bei System-Font). Das würde uns Probleme machen. Exceptionnieren...
-      //"Font.OriginalName" über Hilfsmethode holen, da sonst diese Methode krachbummen würde, wenn "Font.OriginalName" irgendwo im Rumpf steckt!
-      //string strOriginalFontName = _font.OriginalFontName;
-      string strOriginalFontName = C1FlexGridStyleHandler.GetFontOriginalName(_font);
-      if (string.IsNullOrEmpty(strOriginalFontName) == true)
-      {
-        //WKnauf 30.05.2011: Bäähh - das kommt in der Dispoansicht echt häufiger vor...
-        //if (Debugger.IsAttached == true)
-        //{
-        //  throw new EXSystemException("Font.OriginalName ist null: " + _font.Name);
-        //}
-        //else
-        //{
-        //Fallback für Kunden...
-        strOriginalFontName = _font.Name;
-        //}
-      }
-
-      _stringBuilder.Append(strOriginalFontName);
-      //}
-      //else
-      //{
-      //  _stringBuilder.Append(_font.Name);
-      //}
+      _stringBuilder.Append(_font.Name);
+      
       //Font-Size in eckige Klammern kleben da dies eine Kommazahl sein könnte (mit Komma gemäß deutschen Format).
       _stringBuilder.Append(",[");
       _stringBuilder.Append(_font.Size.ToString());
       _stringBuilder.Append("],");
       //Den Font-Style auf einen Int casten, denn wir brauchen hier nicht die Enum-Werte (für die würde ein Lookup wohl sowieso wehtun)
       _stringBuilder.Append(((int)_font.Style).ToString());
-    }
-
-    /// <summary>
-    /// ARGHGHHH: scheinbar gibt es ne "MissingMethodException", wenn die irgendwo in der Methode aufgerufen wird,
-    /// da wohl zur Laufzeit die gesamte Methode auf Konsistenz geprüft wird.
-    /// 
-    /// Deshalb muss man das in eigene Methode packen.
-    /// 
-    /// Damit die net "inline" optimiert wird, mit den entsprechenden Attributen versehen!
-    /// </summary>
-    /// <returns>Font.OriginalName der übergebenen Font.</returns>
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static string GetFontOriginalName(Font _font)
-    {
-      return _font.OriginalFontName;
     }
 
     #endregion
