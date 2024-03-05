@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C1FlexGrid452BorderPainter", "C1FlexGrid452BorderPainter\C1FlexGrid452BorderPainter.csproj", "{78977105-FD3E-4AFE-AAA8-2019A15844CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C1FlexGrid48BorderPainter", "C1FlexGrid48BorderPainter\C1FlexGrid48BorderPainter.csproj", "{78977105-FD3E-4AFE-AAA8-2019A15844CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C1FlexGrid452CopyOffice", "C1FlexGrid452CopyOffice\C1FlexGrid452CopyOffice.csproj", "{E05BD770-4BFF-4BC6-B30B-9435ED46E2EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C1FlexGrid48CopyOffice", "C1FlexGrid48CopyOffice\C1FlexGrid48CopyOffice.csproj", "{E05BD770-4BFF-4BC6-B30B-9435ED46E2EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C1FlexGrid452StyleHandler", "C1FlexGrid452StyleHandler\C1FlexGrid452StyleHandler.csproj", "{25EEEE55-287F-4346-B422-00EE35FBAD0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C1FlexGrid48StyleHandler", "C1FlexGrid48StyleHandler\C1FlexGrid48StyleHandler.csproj", "{25EEEE55-287F-4346-B422-00EE35FBAD0D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C1FlexGrid6BorderPainter", "C1FlexGrid6BorderPainter\C1FlexGrid6BorderPainter.csproj", "{3349CE3D-3A0B-42C4-9958-3EF684AAB848}"
 EndProject

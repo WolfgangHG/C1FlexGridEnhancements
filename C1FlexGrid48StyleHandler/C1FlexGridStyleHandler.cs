@@ -5,9 +5,8 @@ using System.Text;
 using C1.Win.C1FlexGrid;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
-namespace C1FlexGrid452StyleHandler
+namespace C1FlexGrid48StyleHandler
 {
   /// <summary>
   /// This class is used to simplify style life.

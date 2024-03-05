@@ -1,6 +1,6 @@
 using System;
 
-namespace C1FlexGrid452BorderPainter
+namespace C1FlexGrid48BorderPainter
 {
   /// <summary>
   /// This enumeration describes which borders should be painted.

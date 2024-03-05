@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using C1.Win.C1FlexGrid;
 
-namespace C1FlexGrid452BorderPainter
+namespace C1FlexGrid48BorderPainter
 {
   /// <summary>
   /// This class can draw free borders around cells.

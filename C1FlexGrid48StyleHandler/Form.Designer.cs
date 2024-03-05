@@ -1,4 +1,4 @@
-﻿namespace C1FlexGrid452StyleHandler
+﻿namespace C1FlexGrid48StyleHandler
 {
   partial class Form
   {

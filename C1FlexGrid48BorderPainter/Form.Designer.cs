@@ -1,4 +1,4 @@
-﻿namespace C1FlexGrid452BorderPainter
+﻿namespace C1FlexGrid48BorderPainter
 {
   partial class Form
   {

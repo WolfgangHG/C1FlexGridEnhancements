@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace C1FlexGrid452StyleHandler
+namespace C1FlexGrid48StyleHandler
 {
   public partial class Form : System.Windows.Forms.Form
   {

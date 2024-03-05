@@ -1,10 +1,10 @@
-# C1FlexGrid enhancements: Copy to Office (.NET 4.5.2)
+# C1FlexGrid enhancements: Copy to Office (.NET 4.8)
 
 This sample contains a helper class that shows how to write the content of a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls) 
 to the clipboard so that it can be pasted to Word/Excel/Outlook and the formatting is kept.  
 The same code can also be used to export a C1FlexGrid to Html.
 
-This sample uses the C1 dlls for .NET 4.5.2. A version for .NET6 is here: [C1FlexGrid6CopyOffice](/C1FlexGrid6CopyOffice)
+This sample uses the C1 dlls for .NET 4.8. A version for .NET6 is here: [C1FlexGrid6CopyOffice](/C1FlexGrid6CopyOffice)
 
 ## Features
 

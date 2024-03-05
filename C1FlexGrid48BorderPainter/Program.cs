@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace C1FlexGrid452BorderPainter
+namespace C1FlexGrid48BorderPainter
 {
   internal static class Program
   {

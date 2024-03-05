@@ -10,7 +10,7 @@ using System.IO;
 using System.Globalization;
 using System.Diagnostics;
 
-namespace C1FlexGrid452CopyOffice
+namespace C1FlexGrid48CopyOffice
 {
 	/// <summary>
 	/// Summary description for Form1.

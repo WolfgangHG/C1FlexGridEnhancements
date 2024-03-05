@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace C1FlexGrid452CopyOffice
+namespace C1FlexGrid48CopyOffice
 {
   /// <summary>
   /// This utility class copies C1FlexGrid content to the clipboard in HTML format so that it can be pasted to Office.

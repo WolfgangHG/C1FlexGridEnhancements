@@ -1,8 +1,8 @@
-# C1FlexGrid enhancements: BorderPainter (.NET 4.5.2)
+# C1FlexGrid enhancements: BorderPainter (.NET 4.8)
 
 This sample shows a way to define custom borders in a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
 
-This sample uses the C1 dlls for .NET 4.5.2. A version for .NET6 is here: [C1FlexGrid6BorderPainter](/C1FlexGrid6BorderPainter)
+This sample uses the C1 dlls for .NET 4.8. A version for .NET6 is here: [C1FlexGrid6BorderPainter](/C1FlexGrid6BorderPainter)
 
 Normally, you create borders this way:
 

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace C1FlexGrid452BorderPainter
+namespace C1FlexGrid48BorderPainter
 {
   public partial class Form : System.Windows.Forms.Form
   {
