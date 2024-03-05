@@ -136,7 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="C1FlexGrid48CopyOffice.gclicx" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C1.Win.C1FlexGrid">

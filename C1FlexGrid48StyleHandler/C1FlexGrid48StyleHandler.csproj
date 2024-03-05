@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="C1FlexGrid48StyleHandler.gclicx" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C1.Win.C1FlexGrid">
