@@ -303,6 +303,11 @@ namespace C1FlexGrid6CalendarSheet
 
       //If "dayStart" is higher than last day of month, then go to first day of following month.
       int daysInMonthStart = DateTime.DaysInMonth(yearStart, monthStart);
+      //Work around crashes for invalid "dayStart" (selection is in fixed col) => return.
+      if (dayStart <= 0)
+      {
+        return null;
+      }
       if (dayStart > daysInMonthStart)
       {
         //Special case: if selection is a single cell beyond the end of the month, then do nothing.
