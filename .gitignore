@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+# =======================================================
+# Custom ignore list starts here:
+
+# Ignore C1 license files:
+*.gclicx
