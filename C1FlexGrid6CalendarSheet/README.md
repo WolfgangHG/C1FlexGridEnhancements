@@ -1,8 +1,8 @@
-# C1FlexGrid enhancements: Calendar sheet (.NET 6)
+# C1FlexGrid enhancements: Calendar sheet (.NET 8)
 
 This sample demonstrates how to create a calendar view using a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
 
-This sample uses the C1 dlls for .NET 6.
+This sample uses the C1 dlls for .NET 8.
 
 The requirement is to render a year calendar, where each month is a row and the days are columns from 1 to 31. The user should have the possibility
 to select date ranges. And this is the point where it does not work with a C1FlexGrid any more: the C1FlexGrid selection modes allow only selection of rectangle cell ranges (like Excel), 

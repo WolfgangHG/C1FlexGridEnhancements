@@ -1,8 +1,8 @@
-# C1FlexGrid enhancements: optimized AutoSizeRows (.NET 6)
+# C1FlexGrid enhancements: optimized AutoSizeRows (.NET 8)
 
 This sample demonstrates an alternate "AutoSizeRows" mode for ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
 
-This sample uses the C1 dlls for .NET 6.
+This sample uses the C1 dlls for .NET 8.
 
 This sample applies to the situation that a C1FlexGrid contains long (and wrapped) texts in merged ranges, which merge over more than one row.
 
