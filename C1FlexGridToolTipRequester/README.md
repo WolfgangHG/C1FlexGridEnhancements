@@ -26,7 +26,8 @@ This object is a info about the current cell (or cell range) that defines a tool
 Whenever this hint changes, the tooltip is reshown.
 
 "Reshown" means here: a timer is started that ticks after 100ms (`ToolTip.ReshowDelay`). Now the tooltip is triggered to be shown, which happens after `ToolTip.InitialDelay`.
-This timer is necessary, because it does not seem to be possible to activate a tooltip during a `MouseMove` event.
+
+*I am not sure whether this internal timer is really required - I created this sample based on old code, and I am not sure whether it would also work without the timer.*
 
 Common usage: if you want to show tooltips per cell, just set e.g. a `C1.Win.FlexGrid.CellRange`
 object (or a `System.Drawing.Point`) which identifies a single cell.
