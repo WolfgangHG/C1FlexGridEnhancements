@@ -20,5 +20,9 @@ The sample [Calendar sheet (.NET 8)](/C1FlexGrid6CalendarSheet) shows how to ren
 and select date ranges, which requires a bar selection instead of the rectangle selection of C1FlexGrid.
 
 ## AutoSizeRows mode "Height to last"
-The samples [AutoSizeRows: Height to last (.NET 8)](/C1FlexGrid6AutoSizeRowHeightToLast) shows an optimized `AutoSizeRows` mode for multi row merged
+The sample [AutoSizeRows: Height to last (.NET 8)](/C1FlexGrid6AutoSizeRowHeightToLast) shows an optimized `AutoSizeRows` mode for multi row merged
 ranges, so that the first rows of the range are not higher than necessary.
+
+
+## FlexGridToolTipRequester
+The sample [FlexGridToolTipRequester (.NET 8)](/C1FlexGridToolTipRequester) shows to to display a custom tooltip for each cell of the grid.
