@@ -62,5 +62,7 @@ private void toolTipRequester_ToolTipRequest(object sender, ToolTipRequestEventA
 
 You can set the AutoPopDelay of the tooltip (after this period it is hidden), see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.tooltip.autopopdelay
 The default is "5000".
+Note that there was a breaking change in Windows 11: now the default value "5000" does mean "infinite tooltip", you have to set any other value (e.g. "4999" or "5001") to make it hide
+after 5 seconds. See also https://github.com/dotnet/docs/issues/47960
 
 It should be easy to add the other delay properties of the internally used `ToolTip` ;-)
