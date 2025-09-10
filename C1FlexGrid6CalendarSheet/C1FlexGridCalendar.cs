@@ -241,6 +241,13 @@ namespace C1FlexGrid6CalendarSheet
         return null;
       }
 
+      //In SelectionMode = "CellRange", if a fixed cell is clicked, then only this cell is selected.
+      //So cancel if the selection range is not valid.
+      if (rangeSel.BottomRow < this.Rows.Fixed || rangeSel.LeftCol < this.Cols.Fixed)
+      {
+        return null;
+      }
+
       int rowMonthStart;
       int dayStart;
       int rowMonthEnd;
@@ -303,11 +310,6 @@ namespace C1FlexGrid6CalendarSheet
 
       //If "dayStart" is higher than last day of month, then go to first day of following month.
       int daysInMonthStart = DateTime.DaysInMonth(yearStart, monthStart);
-      //Work around crashes for invalid "dayStart" (selection is in fixed col) => return.
-      if (dayStart <= 0)
-      {
-        return null;
-      }
       if (dayStart > daysInMonthStart)
       {
         //Special case: if selection is a single cell beyond the end of the month, then do nothing.
