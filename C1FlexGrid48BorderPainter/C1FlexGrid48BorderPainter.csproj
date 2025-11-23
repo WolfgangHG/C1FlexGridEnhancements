@@ -69,6 +69,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="C1FlexGrid48BorderPainter.gclicx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -84,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C1.Win.C1FlexGrid">
-      <Version>4.8.20251.714</Version>
+      <Version>4.8.20251.721</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
