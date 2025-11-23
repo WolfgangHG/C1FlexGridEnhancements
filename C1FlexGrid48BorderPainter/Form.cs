@@ -54,6 +54,7 @@ namespace C1FlexGrid48BorderPainter
 
       this.borderPainterRed.SetBorders(7, 3, 8, 4);
 
+      //The second border painter uses green borders with a custom width, so we have to create the pen ourself:
       //Store pen in variable so that it can be disposed.
       this.penGreen = new Pen(Color.Green, 2);
       this.borderPainterGreen = new C1FlexGridBorderPainter(this.c1FlexGrid, this.penGreen);
@@ -65,6 +66,8 @@ namespace C1FlexGrid48BorderPainter
       //And another partial border:
       this.borderPainterGreen.SetBorders(10, 3, 11, 4, BorderType.Right | BorderType.Left | BorderType.Bottom);
 
+      //Border in last column - for testing "ExtendLastCol":
+      this.borderPainterGreen.SetBorders(3, 9, 4, 9);
     }
 
     /// <summary>
@@ -83,6 +86,15 @@ namespace C1FlexGrid48BorderPainter
       this.borderPainterGreen.DrawBorders(e);
     }
 
+    /// <summary>
+    /// Toggle "ExtendLastCol" in FlexGrid.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void checkBoxExtendLastCol_CheckedChanged(object sender, EventArgs e)
+    {
+      this.c1FlexGrid.ExtendLastCol = true;
+    }
 
     /// <summary>
     /// Clean up any resources being used.
@@ -103,5 +115,6 @@ namespace C1FlexGrid48BorderPainter
       }
       base.Dispose(disposing);
     }
+
   }
 }

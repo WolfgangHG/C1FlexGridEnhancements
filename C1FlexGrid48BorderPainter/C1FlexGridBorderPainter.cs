@@ -784,9 +784,8 @@ namespace C1FlexGrid48BorderPainter
         }
       }
 
-      //WKnauf 17.06.2013: in a merged range, draw EACH border separately!
+      //In a merged range, draw EACH border separately. Handle also unmerged cells als "merged", which is a single cell range.
       CellRange rangeMerged = this.flexGrid.GetMergedRange(_e.Row, _e.Col);
-      //Für JEDE Zelle  des Merged Range:
       for (int intRowInRange = rangeMerged.TopRow; intRowInRange <= rangeMerged.BottomRow; intRowInRange++)
       {
         for (int intColInRange = rangeMerged.LeftCol; intColInRange <= rangeMerged.RightCol; intColInRange++)
@@ -814,14 +813,33 @@ namespace C1FlexGrid48BorderPainter
 
           //First the easy cases: bottom and right borders. The are drawn in the current cell.
 
-          //Linken Rand sowie Breite der Zelle berechnen, egal ob im folgenden gezeichnet wird oder nicht.
-          //int intX = _e.Bounds.X;
+          //Calculate left edge and width of the cell.
           int intX = intColInRangePos;
-          //int intWidth = _e.Bounds.Width;
           int intWidth = intColInRangeWidth;
-          //Wenn es sich nicht um die allererste Spalte handelt, dann genau auf
-          //der Grid-Linie zeichnen. Ansonsten die Breite um 1 verringern, weil in der ersten Spalte
-          //IN der Zelle gezeichnet werden muß.
+          //If "ExtendLastCol" is true and the current col is the last visible col, then the display area width might be wider than the column width property.
+          if (this.flexGrid.ExtendLastCol == true)
+          {
+            //Last visible col?
+            int intLastVisibleCol = this.flexGrid.Cols.Count - 1;
+            while (this.flexGrid.Cols[intLastVisibleCol].Visible == false)
+            {
+              --intLastVisibleCol;
+            }
+
+            if (intColInRange == intLastVisibleCol)
+            {
+              //Take the client size of grid and subtract the start position of the column:
+              int intWidthRemaining = this.flexGrid.ClientSize.Width - intX;
+              //If this is larger than the current width, then the column is displayed wider than the actual width.
+              if (intWidthRemaining > intWidth)
+              {
+                intWidth = intWidthRemaining;
+              }
+            }
+          }
+
+          //If this is not the first column of the grid, then draw the border on the grid line.
+          //For the first column, reduce the width by 1, because in the first column the border has to be pointed on the left edge of the cell.
           if (_e.Col > 0)
           {
             --intX;
