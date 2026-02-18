@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="C1FlexGridAutoSizeRowHeightToLast/C1FlexGridAutoSizeRowHeightToLast.csproj" />
+  <Project Path="C1FlexGridBorderPainter/C1FlexGridBorderPainter.csproj" />
+  <Project Path="C1FlexGridCalendarSheet/C1FlexGridCalendarSheet.csproj" />
+  <Project Path="C1FlexGridCopyOffice/C1FlexGridCopyOffice.csproj" />
+  <Project Path="C1FlexGridStyleHandler/C1FlexGridStyleHandler.csproj" />
+  <Project Path="C1FlexGridToolTipRequester/C1FlexGridToolTipRequester.csproj" />
+</Solution>
