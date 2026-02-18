@@ -1,8 +1,8 @@
-# C1FlexGrid enhancements: ToolTip per cell (.NET8)
+# C1FlexGrid enhancements: ToolTip per cell (.NET 4.8 and .NET 8)
 
 This sample contains a helper class that makes it possible to show tooltips for single cells of a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls). 
 
-This sample targets .NET8. 
+It supports C1FlexGrid for .NET framework 4.8 and for .NET 8.
 
 
 ## The sample
@@ -60,7 +60,7 @@ private void toolTipRequester_ToolTipRequest(object sender, ToolTipRequestEventA
 
 ## Configuration
 
-You can set the AutoPopDelay of the tooltip (after this period it is hidden), see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.tooltip.autopopdelay
+You can set the AutoPopDelay of the tooltip (after this period it is hidden), see https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.tooltip.autopopdelay. 
 The default is "5000".
 Note that there was a breaking change in Windows 11: now the default value "5000" does mean "infinite tooltip", but any other value still works. 
 To make it hide after 5 seconds, set e.g. "4999" or "5001". See also https://github.com/dotnet/docs/issues/47960

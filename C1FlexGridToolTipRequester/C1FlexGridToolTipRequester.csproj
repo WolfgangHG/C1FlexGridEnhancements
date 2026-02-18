@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="C1.Win.FlexGrid" Version="8.0.20251.721" />
+    <PackageReference Include="C1.Win.FlexGrid" Version="10.0.20252.755" />
   </ItemGroup>
 
 </Project>

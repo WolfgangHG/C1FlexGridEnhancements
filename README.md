@@ -16,7 +16,7 @@ The sample [C1FlexGridStyleHandler](/C1FlexGridStyleHandler) contains a helper c
 by using styles
 
 ## Copy to Office
-The samples [Copy to Office](/C1FlexGridCopyOffice) contains a helper class that shows how to write the C1FlexGrid 
+The sample [Copy to Office](/C1FlexGridCopyOffice) contains a helper class that shows how to write the C1FlexGrid 
 content to the clipboard so that it can be pasted to Word/Excel/Outlook and the formatting is kept.  
 The same code can also be used to export a C1FlexGrid to Html.
 
