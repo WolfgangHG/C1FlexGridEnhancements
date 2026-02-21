@@ -90,7 +90,9 @@ namespace C1FlexGridCopyOffice
 
       sbHTML.AppendLine("<html>");
       sbHTML.AppendLine("<head>");
-
+      //Set the content type to "UTF8" - I don't know whether otherwise problems might arise.
+      sbHTML.AppendLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+      
       #region Convert styles to CSS styles.
       sbHTML.AppendLine("<style>");
 

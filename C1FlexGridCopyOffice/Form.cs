@@ -15,13 +15,13 @@ using System.Linq;
 
 namespace C1FlexGridCopyOffice
 {
-	/// <summary>
-	/// Summary description for Form1.
-	/// </summary>
-	public partial class Form : System.Windows.Forms.Form
-	{
-    
-		public Form()
+  /// <summary>
+  /// Main form of the sample.
+  /// </summary>
+  public partial class Form : System.Windows.Forms.Form
+  {
+
+    public Form()
     {
 #if NET48
       //Set the default font to "SegoeUI 9", so that in .NET 48, the AutoScaleDimension of the .NET8 designer generated code
@@ -48,7 +48,7 @@ namespace C1FlexGridCopyOffice
       {
         for (int iCol = 0; iCol < this.c1FlexGrid.Cols.Count; iCol++)
         {
-          this.c1FlexGrid.SetData (iRow, iCol, iCol + "/" + iRow);
+          this.c1FlexGrid.SetData(iRow, iCol, iCol + "/" + iRow);
         }
       }
 
@@ -67,7 +67,7 @@ namespace C1FlexGridCopyOffice
 
       CellStyle styleWrap = this.c1FlexGrid.Styles.Add("WordWrap", this.c1FlexGrid.Styles.Normal);
       styleWrap.WordWrap = true;
-      
+
       this.c1FlexGrid.SetCellStyle(1, 1, styleBackColorRed);
       this.c1FlexGrid.SetCellStyle(2, 1, styleBackColorRed);
       this.c1FlexGrid.SetCellStyle(3, 1, styleBackColorRed);
@@ -141,12 +141,13 @@ namespace C1FlexGridCopyOffice
       sbHTML.AppendLine("<!DOCTYPE html>");
       sbHTML.AppendLine("<html>");
       sbHTML.AppendLine("<head>");
+      sbHTML.AppendLine("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
 
       //Append css styles created from CellStyles:
       sbHTML.AppendLine("<style>");
       sbHTML.AppendLine(css);
       sbHTML.AppendLine("</style>");
-      
+
       sbHTML.AppendLine("</head>");
 
       sbHTML.AppendLine("<body>");
@@ -155,9 +156,59 @@ namespace C1FlexGridCopyOffice
       sbHTML.AppendLine("</html>");
 
 
+      //"WriteAllText" uses UTF8 for .NET 4.8 and .NET8, this matches the meta tag.
       File.WriteAllText("result.html", sbHTML.ToString());
 
-      Process.Start("result.html");
+      //Cannot open the file like this when using .NET6: "The specified executable is not a valid application for this OS platform"
+      //Process.Start("result.html");
+
+      Process.Start(new ProcessStartInfo("result.html")
+      {
+        UseShellExecute = true
+      });
+    }
+
+    /// <summary>
+    /// Saves clipboard content as HTML file.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void buttonSaveClipboardContent_Click(object sender, EventArgs e)
+    {
+      string clipboardcontent = (string)Clipboard.GetData(DataFormats.Html);
+
+      if (string.IsNullOrEmpty(clipboardcontent))
+      {
+        MessageBox.Show(this, "Clipboard does not seem to contain HTML content");
+        return;
+      }
+      File.WriteAllText("clipboard.html", clipboardcontent);
+
+      MessageBox.Show(this, "Clipboard content was saved as html to file " + Path.GetFullPath("clipboard.html"));
+    }
+
+    /// <summary>
+    /// Loads HTML file and writes it to the clipboard.
+    /// 
+    /// This is the counterpart to the "save clipboard content" button: after using this one, you could modify the file
+    /// and write the file content back to the clipboard to test the result of your modification.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void buttonSetClipboardContentFromFile_Click(object sender, EventArgs e)
+    {
+      if (!File.Exists("clipboard.html"))
+      {
+        MessageBox.Show(this, "File " + Path.GetFullPath("clipboard.html") + " does not exist");
+        return;
+      }
+
+      string text = File.ReadAllText("clipboard.html");
+
+      Clipboard.Clear();
+      Clipboard.SetData(DataFormats.Html, text);
+
+      MessageBox.Show(this, "File content was written to clipboard");
     }
   }
 }
