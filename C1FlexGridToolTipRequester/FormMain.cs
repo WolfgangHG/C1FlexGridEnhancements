@@ -1,5 +1,8 @@
 using C1.Win.FlexGrid;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Windows.Forms;
 
 namespace C1FlexGridToolTipRequester
@@ -8,7 +11,24 @@ namespace C1FlexGridToolTipRequester
   {
     public FormMain()
     {
+#if NET48
+      //Set the default font to "SegoeUI 9", so that in .NET 48, the AutoScaleDimension of the .NET8 designer generated code
+      //matches the actual of the form.
+      //In .NET8, the font is automatically "SegoeUI 9".
+      this.Font = SystemFonts.MessageBoxFont;
+#endif
+
       InitializeComponent();
+
+
+      //Write target framework to window title:
+      object[] targetFrameworkAttributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(TargetFrameworkAttribute), false);
+      //There should be exactly one attribute.
+      TargetFrameworkAttribute ta = (TargetFrameworkAttribute)targetFrameworkAttributes.FirstOrDefault();
+      //Don't know whether a NULL check is required.
+      string targetFramework = ta?.FrameworkDisplayName ?? "--unknown--";
+      this.Text += $" ({targetFramework})";
+
 
       for (int col = this.c1FlexGrid.Cols.Fixed; col < this.c1FlexGrid.Cols.Count; col++)
       {

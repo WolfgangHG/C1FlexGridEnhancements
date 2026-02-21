@@ -11,9 +11,11 @@ namespace C1FlexGridToolTipRequester
     [STAThread]
     static void Main()
     {
-      // To customize application configuration such as set high DPI settings or default font,
-      // see https://aka.ms/applicationconfiguration.
-      ApplicationConfiguration.Initialize();
+      Application.EnableVisualStyles();
+      Application.SetCompatibleTextRenderingDefault(false);
+#if NET8_0_OR_GREATER
+      Application.SetHighDpiMode(HighDpiMode.SystemAware);
+#endif
       Application.Run(new FormMain());
     }
   }
