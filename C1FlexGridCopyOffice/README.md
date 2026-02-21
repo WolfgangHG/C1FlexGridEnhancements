@@ -13,7 +13,7 @@ It supports C1FlexGrid for .NET framework 4.8 and for .NET 8.
     * copy selected rows (column headers for the entire grid are also copied)
     * copy entire grid
 * The entire grid can also be saved to html
-* Supported cell style formatting: forecolor, backcolor, font (font family and font size are only applied if the are not the C1FlexGrid Defaults)
+* Supported cell style formatting: forecolor, backcolor, font (font family and font size are only applied if they are not the C1FlexGrid Defaults)
 * merged ranges are supported
 * borders are supported - but just basic support, e.g. no width and no border styles.  
 The sample contains code to also support the [C1FlexGridBorderPainter](../C1FlexGridBorderPainter), but this code is commented.
@@ -33,16 +33,16 @@ E.g. the style "Fixed" in my sample results in this css style:
 .stFixed
  {color:#000000;background:#F0F0F0;border-bottom: solid #000000 0.5pt;border-top: solid #000000 0.5pt;border-left: solid #000000 0.5pt;border-right: solid #000000 0.5pt;}
 ~~~~
-The stylenames all have the prefix "st" in order to avoid "invalid" css style names that could result from my "C1FlexGridStyleHandler" sample).
+The stylenames all have the prefix "st" in order to avoid "invalid" (starting with a number) css style names that could result from my "C1FlexGridStyleHandler" sample).
 
 
 ## Clipboard format
 The HTML clipboard format is described here: https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format
 
-And an older version of the link with different content: https://web.archive.org/web/20170109133016/https://msdn.microsoft.com/en-us/library/windows/desktop/ms649015(v=vs.85).aspx
+Here is an older version of the link with different content: https://web.archive.org/web/20170109133016/https://msdn.microsoft.com/en-us/library/windows/desktop/ms649015(v=vs.85).aspx
 
 Here is a sample:
-~~~~
+~~~~html
 Version:1.0
 StartHTML:0000000107
 EndHTML:0000001953
@@ -83,3 +83,18 @@ The heading defines positions of the html start and length and of the body conte
 In the html head, a list of styles is defined.
 
 The body content is also marked with a comment with the content "StartFragment" / "EndFragment", as required by the specification.
+
+## Hack: text color and Word
+In 2026, pasting the fore color of cell content did not work for Word/Outlook, but for Excel.
+
+By copying a table with texts with a fore color from Excel to the clipboard and analyzing the HTML string placed in the clipboard, I found that it works again when setting this 
+`meta` tag:
+
+~~~html
+<html>
+<head>
+<meta name="ProgId" content="Excel.Sheet">
+</head>
+~~~
+
+So my sample always sets this tag.

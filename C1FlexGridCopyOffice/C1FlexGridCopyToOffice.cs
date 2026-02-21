@@ -92,7 +92,10 @@ namespace C1FlexGridCopyOffice
       sbHTML.AppendLine("<head>");
       //Set the content type to "UTF8" - I don't know whether otherwise problems might arise.
       sbHTML.AppendLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-      
+      //Workaround: without this line, pasting to Word/Outlook will not pick fore colors.
+      //Found by copying a table from excel, then examing the clipboard content.
+      sbHTML.AppendLine("<meta name=\"ProgId\" content=\"Excel.Sheet\">");
+
       #region Convert styles to CSS styles.
       sbHTML.AppendLine("<style>");
 
@@ -211,7 +214,11 @@ namespace C1FlexGridCopyOffice
           //Don't create a top/left border definition - C1FlexGrid defines them in the cell before.
           strStyleData += GetBorderStyleCSS(style, false, false, true, true);
         }
-        
+        else
+        {
+          //No border in cell: copy border from "normal" style? But we can't decide whether this is the style for a fixed or a normal cell.
+        }
+
         //Export it only if the style definition is not empty:
         if (strStyleData.Length > 0)
         {
@@ -693,7 +700,7 @@ namespace C1FlexGridCopyOffice
       string strStyleData = string.Empty;
 
       //Create color string:
-      string strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.ForeColor.ToArgb()));
+      string strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.Border.Color.ToArgb()));
 
       //C1Flexgrid can only define borders to the right and below, so apply it similar.
       if (_style.Border.Direction == BorderDirEnum.Horizontal || _style.Border.Direction == BorderDirEnum.Both)

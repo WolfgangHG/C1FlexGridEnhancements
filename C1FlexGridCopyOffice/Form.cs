@@ -112,6 +112,7 @@ namespace C1FlexGridCopyOffice
       CellStyle styleBorder = this.c1FlexGrid.Styles.Add("Border", this.c1FlexGrid.Styles.Normal);
       styleBorder.Border.Style = BorderStyleEnum.Flat;
       styleBorder.Border.Direction = BorderDirEnum.Horizontal;
+      styleBorder.Border.Color = Color.Green;
       this.c1FlexGrid.SetCellStyle(8, 2, styleBorder);
       this.c1FlexGrid.SetCellStyle(8, 3, styleBorder);
       this.c1FlexGrid.SetCellStyle(8, 4, styleBorder);
