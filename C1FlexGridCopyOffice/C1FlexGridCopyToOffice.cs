@@ -208,12 +208,11 @@ namespace C1FlexGridCopyOffice
         {
           //Does that style have a border? This is the case if the DefinedElements are set, AND the style is not "None".
 
-          //Also create top/left border definition - compatible to previous version...
-          strStyleData += GetBorderStyleCSS(style, true, true, true, true);
+          //Don't create a top/left border definition - C1FlexGrid defines them in the cell before.
+          strStyleData += GetBorderStyleCSS(style, false, false, true, true);
         }
-        //TextAlign??? Bisher noch nicht benötigt.
-
-        //Nur exportieren wenn der Style etwas definiert.
+        
+        //Export it only if the style definition is not empty:
         if (strStyleData.Length > 0)
         {
           string styleName = NormalizeStyleName(style.Name);
@@ -226,21 +225,21 @@ namespace C1FlexGridCopyOffice
       #endregion
 
       var sbHTML = new StringBuilder();
-      //Ohne Border kopieren. TODO...
+      //Define table border:
       if (_flexGrid.Styles.Normal.Border.Style != BorderStyleEnum.None)
       {
         //sbHTML.AppendLine("<table border style=\"border-top:1.5pt solid windowtext;border-right:1.5pt solid windowtext;border-bottom:1.5pt solid windowtext;border-left:1.5pt solid windowtext\">");
-        //"border-collapse: collapse" => führt dazu, dass KEINE doppelten Borders entstehen!
+        //"border-collapse: collapse" => does not cause double borders.
         //https://www.w3schools.com/Css/css_table.asp
         sbHTML.AppendLine("<table border style=\"border-collapse: collapse;border:none\">");
       }
       else
       {
-        //Border abschalten:
-        //Auch wenn sie aus ist muss "border-collapse: collapse" eingeschaltet werden, da ohne die Zellenborders sonst doppelt werden.
+        //A normal border is available: Switch off table border anyway.
+        //Even it is off, we must define "border-collapse: collapse". Otherwise cell borders would result in double borders.
         sbHTML.AppendLine("<table border=0 style=\"border-collapse: collapse;border:none\">");
         //sbHTML.AppendLine("<table border=0 style=mso-border-alt:solid windowtext .5pt;>");
-        //Das hier führt eine dicke Doppelborder ein: "style=mso-border-alt:solid windowtext .5pt;"
+        //This creates a double border: "style=mso-border-alt:solid windowtext .5pt;"
       }
       int intRowFrom, intColFrom, intRowTo, intColTo;
 
@@ -261,8 +260,7 @@ namespace C1FlexGridCopyOffice
             CellRange selection = _flexGrid.Selection;
             if (selection.IsValid == false || selection.TopRow < _flexGrid.Rows.Fixed)
             {
-              //Fallback bei ungültiger Auswahl: eigentlich nicht mehr nötig - war vorher nur in der Dispoansicht-HTML-Konvertierung
-              //benötigt.
+              //Fallback if selection is invalid: copy full table. Probably not required
               intRowFrom = _flexGrid.Rows.Fixed;
               intColFrom = _flexGrid.Cols.Fixed;
               intRowTo = _flexGrid.Rows.Count - 1;
@@ -270,7 +268,7 @@ namespace C1FlexGridCopyOffice
             }
             else
             {
-              //Gültige Selection: die Spalten gehen über die gesamte Breite.
+              //Valid selection: copy all data columns.
               intRowFrom = selection.TopRow;
               intColFrom = _flexGrid.Cols.Fixed;
               intRowTo = selection.BottomRow;
@@ -283,8 +281,7 @@ namespace C1FlexGridCopyOffice
             CellRange selection = _flexGrid.Selection;
             if (selection.IsValid == false || selection.TopRow < _flexGrid.Rows.Fixed || selection.LeftCol < _flexGrid.Cols.Fixed)
             {
-              //Fallback bei ungültiger Auswahl: eigentlich nicht mehr nötig - war vorher nur in der Dispoansicht-HTML-Konvertierung
-              //benötigt.
+              //Fallback if selection is invalid: copy full table. Probably not required
               intRowFrom = _flexGrid.Rows.Fixed;
               intColFrom = _flexGrid.Cols.Fixed;
               intRowTo = _flexGrid.Rows.Count - 1;
@@ -300,19 +297,17 @@ namespace C1FlexGridCopyOffice
             break;
           }
         default:
-          throw new InvalidOperationException("Unbekannter CopyMode: " + _copyMode);
+          throw new InvalidOperationException("Unknown CopyMode: " + _copyMode);
       }
 
 
-      //Testen: Excel => wie kriege ich das zur Breitenübernahme?
+      //Test: apply column with to excel:
 
-      /*Bringt nix....
-      //Angeblich: https://www.experts-exchange.com/questions/24305882/Setting-Excel-Column-Width-in-HTML.html => funzt net
-      //Zuallererst die Cols:
-      //Der Einfachheit halber: über alle laufen von vorne bis zum Endspalte.
+      /*Does not work. Event when copying from a word table to excel, the widths don't work.
+      //Should work like this: https://www.experts-exchange.com/questions/24305882/Setting-Excel-Column-Width-in-HTML.html => but it fails
       for (int intCol = 0; intCol <= intColTo; intCol++)
       {
-      //Die zwischen Fixed und gewähltem Bereich werden rausgelassen.
+        //Ignore non fixed cols if they are not part of the selection.
         if (intCol < _flexGrid.Cols.Fixed || intCol >= intColFrom)
         {
           int intColWidth = _flexGrid.Cols[intCol].WidthDisplay;
@@ -324,7 +319,7 @@ namespace C1FlexGridCopyOffice
 
       //Row heights are no problem - at least autosized rows are handled by office if no row heigth is specified.
 
-      //Erstmal die Fixed:
+      //First copy fixed rows:
       if (_flexGrid.Rows.Fixed > 0)
       {
         sbHTML.AppendLine("<thead>");
@@ -337,7 +332,7 @@ namespace C1FlexGridCopyOffice
             CopyCells(_flexGrid, intRow, 0, 0, _flexGrid.Cols.Fixed - 1, _flexGrid.Rows.Fixed - 1, /*_listBorderPainter,*/ sbHTML, "th");
           }
 
-          //Datenzellen: nur im kopierten Bereich:
+          //Other column headers: copy only in the selection range:
           CopyCells(_flexGrid, intRow, intColFrom, 0, intColTo, _flexGrid.Rows.Fixed - 1, /*_listBorderPainter,*/ sbHTML, "th");
           sbHTML.AppendLine("</tr>");
         }
@@ -347,8 +342,6 @@ namespace C1FlexGridCopyOffice
       {
         sbHTML.AppendLine("<tr height=" + _flexGrid.Rows[intRow].HeightDisplay + ">");
         //Copy fixed cols always:
-
-        //Die fixed werden immer mitkopiert:
         if (_flexGrid.Cols.Fixed > 0)
         {
           CopyCells(_flexGrid, intRow, 0, intRowFrom, _flexGrid.Cols.Fixed - 1, intRowTo, /*_listBorderPainter,*/ sbHTML);
@@ -742,8 +735,7 @@ namespace C1FlexGridCopyOffice
     private static string ReplaceHtmlChars(string strString)
     {
       StringBuilder html = new StringBuilder(strString);
-      // Replace "&" first, sonst schlaegt
-      // diese Ersetzung bei den andern Entities zu.
+      // Replace "&" first, as the following replacements might insert further "&" chars.
       html.Replace("&", "&amp;");
 
       html.Replace("\"", "&quot;");

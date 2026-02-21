@@ -108,6 +108,14 @@ namespace C1FlexGridCopyOffice
       //switch off border in the normal style:
       this.c1FlexGrid.Styles.Normal.Border.Style = BorderStyleEnum.None;
 
+      //But set a border to some cells:
+      CellStyle styleBorder = this.c1FlexGrid.Styles.Add("Border", this.c1FlexGrid.Styles.Normal);
+      styleBorder.Border.Style = BorderStyleEnum.Flat;
+      styleBorder.Border.Direction = BorderDirEnum.Horizontal;
+      this.c1FlexGrid.SetCellStyle(8, 2, styleBorder);
+      this.c1FlexGrid.SetCellStyle(8, 3, styleBorder);
+      this.c1FlexGrid.SetCellStyle(8, 4, styleBorder);
+
       //Merge some cells:
       this.c1FlexGrid.MergedRanges.Add(this.c1FlexGrid.GetCellRange(10, 2, 12, 4));
       //Also merge fixed cells:
