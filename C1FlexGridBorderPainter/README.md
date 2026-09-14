@@ -89,7 +89,7 @@ It is not sufficient to set the `VerticalColor`, you also have to set `Horizonta
 And there is a slight layout problem: you cannot draw a vertical line over some rows,
 there will be a small gap at the bottom side of each cell, where the horizontal border is drawn
 (it renders over the vertical line).
-This issue can be resolved by using my BorderPainter (which is only a side effect :smile ).
+This issue can be resolved by using my BorderPainter (which is only a side effect :smile: ).
 
 
 ## Introducing "C1FlexGridBorderPainter"
