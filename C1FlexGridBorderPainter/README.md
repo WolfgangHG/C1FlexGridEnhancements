@@ -4,7 +4,13 @@ This sample shows a way to define custom borders in a ComponentOne C1FlexGrid (h
 
 It supports C1FlexGrid for .NET framework 4.8 and for .NET 8.
 
-Normally, you create borders this way:
+This sample is partially deprecated - since C1FlexGrid 8.0.20241.657 you can define cell borders more flexible, so that you could achieve everything that
+is shown in this sample by C1FlexGrid `CellStyle`. But you will see that it is much more work to achieve the same.
+
+## Borders in `C1FlexGrid`
+
+### Basic borders
+You create borders this way:
 
 ~~~~c#
 CellStyle styleWithBorder = this.c1FlexGrid.Styles.Add("WithBorder", this.c1FlexGrid.Styles.Normal);
@@ -28,11 +34,70 @@ Same for a left border: create a style with only a right border ("Border.Directi
 
 This approach has the limitation that you cannot use different border types for left and bottom border of the cell.
 
-To simplify this (and overcome the limitation), this sample contains a helper class "C1FlexGridBorderPainter".
+For example, you will loose the horizontal grid line in the cell to the left border of this sample rectangle
+(between cells 7/3 and 8/3):
+
+![BorderPainter](images/limitation.png)
+
+
+### Borders since .657
+Since `C1FlexGrid` .657, the `BorderDirEnum` enum has one more value `BothDifferent`, and you can set
+different borders for right (properties `VerticalColor` and `VerticalWidth`) and bottom border (properties `HorizontalColor` and `HorizontalWidth`).
+
+In the previous limitation sample, you have to apply the default grid border color to the horizontal border of the cell.
+
+Here is a sample code snippet that is also used in my sample:
+
+~~~~c#
+//Right border (also used for left border of the rectangle):
+CellStyle styleRightRed = this.c1FlexGrid.Styles.Add("RightRed", this.c1FlexGrid.Styles.Normal);
+styleRightRed.Border.Direction = BorderDirEnum.BothDifferent;
+styleRightRed.Border.VerticalColor = Color.Red;
+styleRightRed.Border.VerticalWidth = 1;
+//Reset horizontal border to default color, otherwise it is black:
+styleRightRed.Border.HorizontalColor = styleRightRed.Border.Color;
+this.c1FlexGrid.SetCellStyle(3, 2, styleRightRed);
+      
+//Top line of the rectangle:
+CellStyle styleBottomRed = this.c1FlexGrid.Styles.Add("BottomRed", this.c1FlexGrid.Styles.Normal);
+styleBottomRed.Border.Direction = BorderDirEnum.BothDifferent;
+styleBottomRed.Border.HorizontalColor = Color.Red;
+styleBottomRed.Border.HorizontalWidth = 1;
+//Reset horizontal border to default color, otherwise it is black:
+styleBottomRed.Border.VerticalColor = styleBottomRed.Border.Color;
+//Bottom border of the row above the rectangle:
+this.c1FlexGrid.SetCellStyle(2, 3, styleBottomRed);
+this.c1FlexGrid.SetCellStyle(2, 4, styleBottomRed);
+this.c1FlexGrid.SetCellStyle(2, 5, styleBottomRed);
+
+//Bottom line of the rectangle:
+this.c1FlexGrid.SetCellStyle(3, 3, styleBottomRed);
+this.c1FlexGrid.SetCellStyle(3, 4, styleBottomRed);
+
+//Right cell has bottom and right border. So it is a "Both" border:
+CellStyle styleBottomRightRed = this.c1FlexGrid.Styles.Add("BottomRightRed", this.c1FlexGrid.Styles.Normal);
+styleBottomRightRed.Border.Direction = BorderDirEnum.Both;
+styleBottomRightRed.Border.Color = Color.Red;
+styleBottomRightRed.Border.Width = 1;
+this.c1FlexGrid.SetCellStyle(3, 5, styleBottomRightRed);
+
+~~~~
+
+There is one pitfall: in my sample, the cell left to the rectangle shall have the C1FlexGrid default grid line color.
+It is not sufficient to set the `VerticalColor`, you also have to set `HorizontalColor` to the normal style border, otherwise, the default `Black` is used.
+
+And there is a slight layout problem: you cannot draw a vertical line over some rows,
+there will be a small gap at the bottom side of each cell, where the horizontal border is drawn
+(it renders over the vertical line).
+This issue can be resolved by using my BorderPainter (which is only a side effect :smile ).
+
+
+## Introducing "C1FlexGridBorderPainter"
+To simplify this, this sample contains a helper class "C1FlexGridBorderPainter".
 
 The result looks like this:
 
-![BorderPainter](borderpainter.png)
+![BorderPainter](images/borderpainter.png)
 
 ## Usage of "C1FlexGridBorderPainter"
 To use it:
