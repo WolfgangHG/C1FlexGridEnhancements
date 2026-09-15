@@ -44,7 +44,7 @@ For example, you will loose the horizontal grid line in the cell to the left bor
 Since `C1FlexGrid` .657, the `BorderDirEnum` enum has one more value `BothDifferent`, and you can set
 different borders for right (properties `VerticalColor` and `VerticalWidth`) and bottom border (properties `HorizontalColor` and `HorizontalWidth`).
 
-With this feature, you can overcome the limitation of the previous sample: you have to apply the default grid border color to the horizontal border of the cell 7/2.
+With this feature, you can overcome the limitation of the previous sample: you have to apply the default grid border color to the horizontal border of cell 7/2.
 
 Here is a sample code snippet that is also used in my sample:
 
