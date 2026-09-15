@@ -175,6 +175,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor,
         _backColor,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -190,7 +191,9 @@ namespace C1FlexGridStyleHandler
     public void MergeBackColor(int _intRow1, int _intCol1, int _intRow2, int _intCol2, Color _backColor)
     {
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor,
-        _backColor, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        _backColor, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -237,7 +240,9 @@ namespace C1FlexGridStyleHandler
     {
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor | StyleElementFlags.ForeColor,
-        _backColor, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        _backColor, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -254,7 +259,9 @@ namespace C1FlexGridStyleHandler
     {
       //Use the "allover" method, and set only the back and fore color (all other fields can have their defaults).
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.BackColor | StyleElementFlags.ForeColor,
-        _backColor, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        _backColor,
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -278,9 +285,10 @@ namespace C1FlexGridStyleHandler
       //If the cell has no cellStyle or no BackColor is specified, then don't do anything.
       if (cellStyle != null && (cellStyle.DefinedElements & StyleElementFlags.BackColor) == StyleElementFlags.BackColor)
       {
-        StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.BackColor; //"XOR" entfernt hier die BackColor.
+        StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.BackColor; //"XOR" remove the BackColor.
         this.SetStyle(cellStyle, _intRow, _intCol, styleElemFlagsNew, COLOR_UNSPECIFIED,
           cellStyle.Border.Color, cellStyle.Border.Direction, cellStyle.Border.Style, cellStyle.Border.Width,
+          cellStyle.Border.HorizontalColor, cellStyle.Border.HorizontalWidth, cellStyle.Border.VerticalColor, cellStyle.Border.VerticalWidth,
           cellStyle.Font, cellStyle.ForeColor, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection, cellStyle.Format);
       }
     }
@@ -289,6 +297,9 @@ namespace C1FlexGridStyleHandler
     #region Set/Merge Border
     /// <summary>
     /// Set the Border to a cell.
+    /// 
+    /// This method is used for all <paramref name="_borderDirection"/> besides <see cref="BorderDirEnum.BothDifferent"/>,
+    /// where the border has a single color/width for horizontal and vertical border.
     /// </summary>
     /// <param name="_intRow"></param>
     /// <param name="_intCol"></param>
@@ -304,6 +315,9 @@ namespace C1FlexGridStyleHandler
 
     /// <summary>
     /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// 
+    /// This method is used for all <paramref name="_borderDirection"/> besides <see cref="BorderDirEnum.BothDifferent"/>,
+    /// where the border has a single color/width for horizontal and vertical border.
     /// </summary>
     /// <param name="_intRow"></param>
     /// <param name="_intCol"></param>
@@ -319,6 +333,9 @@ namespace C1FlexGridStyleHandler
 
     /// <summary>
     /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// 
+    /// This method is used for all <paramref name="_borderDirection"/> besides <see cref="BorderDirEnum.BothDifferent"/>,
+    /// where the border has a single color/width for horizontal and vertical border.
     /// </summary>
     /// <param name="_intRow"></param>
     /// <param name="_strCol"></param>
@@ -335,6 +352,9 @@ namespace C1FlexGridStyleHandler
 
     /// <summary>
     /// Set the Border to a cell RANGE, all other values are based on the specified base style.
+    /// 
+    /// This method is used for all <paramref name="_borderDirection"/> besides <see cref="BorderDirEnum.BothDifferent"/>,
+    /// where the border has a single color/width for horizontal and vertical border.
     /// </summary>
     /// <param name="_intRow1"></param>
     /// <param name="_intCol1"></param>
@@ -346,15 +366,24 @@ namespace C1FlexGridStyleHandler
     /// <param name="_intBorderWidth"></param>
     public void SetBorder(int _intRow1, int _intCol1, int _intRow2, int _intCol2, Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth)
     {
+      if (_borderDirection == BorderDirEnum.BothDifferent)
+      {
+        throw new ArgumentException($"For BorderDirection = {BorderDirEnum.BothDifferent}, use method {nameof(SetBorderBothDifferent)}");
+      }
       //Use the "allover" method, and set only the border values (all other fields can have their defaults).
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Border,
         COLOR_UNSPECIFIED,
         _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
+        //Those values are not used when building the style string, so they are invalid.
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
     /// <summary>
     /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// 
+    /// This method is used for all <paramref name="_borderDirection"/> besides <see cref="BorderDirEnum.BothDifferent"/>,
+    /// where the border has a single color/width for horizontal and vertical border.
     /// </summary>
     /// <param name="_intRow1"></param>
     /// <param name="_intCol1"></param>
@@ -366,9 +395,131 @@ namespace C1FlexGridStyleHandler
     /// <param name="_intBorderWidth"></param>
     public void MergeBorder(int _intRow1, int _intCol1, int _intRow2, int _intCol2, Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth)
     {
+      if (_borderDirection == BorderDirEnum.BothDifferent)
+      {
+        throw new ArgumentException($"For BorderDirection = {BorderDirEnum.BothDifferent}, use method {nameof(MergeBorderBothDifferent)}");
+      }
+
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Border,
         COLOR_UNSPECIFIED, _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
+        //Those values are not used when building the style string, so they are invalid.
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
+    }
+
+    /// <summary>
+    /// Set the Border to a cell.
+    /// 
+    /// This method always sets <see cref="CellBorder.Direction"/> of <see cref="BorderDirEnum.BothDifferent"/>,
+    /// so you have to specify color and width both of the vertical and horizontal border.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_intCol"></param>
+    /// <param name="_borderStyle"></param>
+    /// <param name="_borderColorHorizontal">This is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">This is the horizontal border width</param>
+    /// <param name="_borderColorVertical">This is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">This is the vertical border width</param>
+    public void SetBorderBothDifferent(int _intRow, int _intCol, BorderStyleEnum _borderStyle,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical)
+    {
+      //Use the cell range method:
+      this.SetBorderBothDifferent(_intRow, _intCol, _intRow, _intCol, _borderStyle, _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical);
+    }
+
+    /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// 
+    /// This method always sets <see cref="CellBorder.Direction"/> of <see cref="BorderDirEnum.BothDifferent"/>,
+    /// so you have to specify color and width both of the vertical and horizontal border.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_intCol"></param>
+    /// <param name="_borderStyle"></param>
+    /// <param name="_borderColorHorizontal">This is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">This is the horizontal border width</param>
+    /// <param name="_borderColorVertical">This is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">This is the vertical border width</param>
+    public void MergeBorderBothDifferent(int _intRow, int _intCol, BorderStyleEnum _borderStyle,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical)
+    {
+      //Use the cell range method:
+      this.MergeBorderBothDifferent(_intRow, _intCol, _intRow, _intCol, _borderStyle, _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical);
+    }
+
+    /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// 
+    /// This method always sets <see cref="CellBorder.Direction"/> of <see cref="BorderDirEnum.BothDifferent"/>,
+    /// so you have to specify color and width both of the vertical and horizontal border.
+    /// </summary>
+    /// <param name="_intRow"></param>
+    /// <param name="_strCol"></param>
+    /// <param name="_borderStyle"></param>
+    /// <param name="_borderColorHorizontal">This is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">This is the horizontal border width</param>
+    /// <param name="_borderColorVertical">This is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">This is the vertical border width</param>
+    public void MergeBorderBothDifferent(int _intRow, string _strCol, BorderStyleEnum _borderStyle,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical)
+    {
+      int intCol = this.flexGrid.Cols[_strCol].Index;
+      //Use the cell range method:
+      this.MergeBorderBothDifferent(_intRow, intCol, _intRow, intCol, _borderStyle, _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical);
+    }
+
+    /// <summary>
+    /// Set the Border to a cell RANGE, all other values are based on the specified base style.
+    /// 
+    /// This method always sets <see cref="CellBorder.Direction"/> of <see cref="BorderDirEnum.BothDifferent"/>,
+    /// so you have to specify color and width both of the vertical and horizontal border.
+    /// </summary>
+    /// <param name="_intRow1"></param>
+    /// <param name="_intCol1"></param>
+    /// <param name="_intRow2"></param>
+    /// <param name="_intCol2"></param>
+    /// <param name="_borderStyle"></param>
+    /// <param name="_borderColorHorizontal">This is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">This is the horizontal border width</param>
+    /// <param name="_borderColorVertical">This is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">This is the vertical border width</param>
+    public void SetBorderBothDifferent(int _intRow1, int _intCol1, int _intRow2, int _intCol2, BorderStyleEnum _borderStyle,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical)
+    {
+      //Use the "allover" method, and set only the border values (all other fields can have their defaults).
+      this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Border,
+        COLOR_UNSPECIFIED,
+        //Standard BorderColor/Width are irrelevant.
+        COLOR_UNSPECIFIED, BorderDirEnum.BothDifferent, _borderStyle, BORDERWIDTH_UNSPECIFIED,
+        _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical,
+        FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
+    }
+
+    /// <summary>
+    /// Takes the style information from the cell at (col/row) and merges it with the specified border information.
+    /// 
+    /// This method always sets <see cref="CellBorder.Direction"/> of <see cref="BorderDirEnum.BothDifferent"/>,
+    /// so you have to specify color and width both of the vertical and horizontal border.
+    /// </summary>
+    /// <param name="_intRow1"></param>
+    /// <param name="_intCol1"></param>
+    /// <param name="_intRow2"></param>
+    /// <param name="_intCol2"></param>
+    /// <param name="_borderStyle"></param>
+    /// <param name="_borderColorHorizontal">This is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">This is the horizontal border width</param>
+    /// <param name="_borderColorVertical">This is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">This is the vertical border width</param>
+    public void MergeBorderBothDifferent(int _intRow1, int _intCol1, int _intRow2, int _intCol2, BorderStyleEnum _borderStyle,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical)
+    {
+      //Use common "MergeStyle" method.
+      this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Border,
+        COLOR_UNSPECIFIED,
+        //Standard BorderColor/Width are irrelevant.
+        COLOR_UNSPECIFIED, BorderDirEnum.BothDifferent, _borderStyle, BORDERWIDTH_UNSPECIFIED,
+        _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
@@ -411,7 +562,7 @@ namespace C1FlexGridStyleHandler
     }
 
     /// <summary>
-    /// Set the Back Color to a cell range
+    /// Set the Font to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
     /// <param name="_intCol1"></param>
@@ -424,6 +575,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Font,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         _font, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     /// <summary>
@@ -438,7 +590,9 @@ namespace C1FlexGridStyleHandler
     {
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Font,
-        COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         _font, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -458,9 +612,10 @@ namespace C1FlexGridStyleHandler
       //If the cell has no cellStyle or no Font is specified, then don't do anything.
       if (cellStyle != null && (cellStyle.DefinedElements & StyleElementFlags.Font) == StyleElementFlags.Font)
       {
-        StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.Font; //"XOR" entfernt hier die Font.
+        StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.Font; //"XOR" removes the Font.
         this.SetStyle(cellStyle, _intRow, _intCol, styleElemFlagsNew, cellStyle.BackColor,
           cellStyle.Border.Color, cellStyle.Border.Direction, cellStyle.Border.Style, cellStyle.Border.Width,
+          cellStyle.Border.HorizontalColor, cellStyle.Border.HorizontalWidth, cellStyle.Border.VerticalColor, cellStyle.Border.VerticalWidth,
           FONT_UNSPECIFIED, cellStyle.ForeColor, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection, cellStyle.Format);
       }
     }
@@ -517,6 +672,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ForeColor,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     /// <summary>
@@ -532,6 +688,7 @@ namespace C1FlexGridStyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ForeColor,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, _foreColor, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -550,9 +707,10 @@ namespace C1FlexGridStyleHandler
       //If the cell has no cellStyle or no ForeColor is specified, then don't do anything.
       if (cellStyle != null && (cellStyle.DefinedElements & StyleElementFlags.ForeColor) == StyleElementFlags.ForeColor)
       {
-        StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.ForeColor; //"XOR" entfernt hier die ForeColor.
+        StyleElementFlags styleElemFlagsNew = cellStyle.DefinedElements ^ StyleElementFlags.ForeColor; //"XOR" removes the ForeColor.
         this.SetStyle(cellStyle, _intRow, _intCol, styleElemFlagsNew, cellStyle.BackColor,
           cellStyle.Border.Color, cellStyle.Border.Direction, cellStyle.Border.Style, cellStyle.Border.Width,
+          cellStyle.Border.HorizontalColor, cellStyle.Border.HorizontalWidth, cellStyle.Border.VerticalColor, cellStyle.Border.VerticalWidth,
           cellStyle.Font, COLOR_UNSPECIFIED, cellStyle.TextAlign, cellStyle.WordWrap, cellStyle.ImageAlign, cellStyle.TextDirection, cellStyle.Format);
       }
     }
@@ -609,6 +767,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextAlign,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, _textAlign, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     /// <summary>
@@ -624,6 +783,7 @@ namespace C1FlexGridStyleHandler
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextAlign,
         COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, _textAlign, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
@@ -679,6 +839,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.WordWrap,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, _bolWordWrap, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -694,7 +855,9 @@ namespace C1FlexGridStyleHandler
     {
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.WordWrap,
-        COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, _bolWordWrap, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
@@ -750,6 +913,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ImageAlign,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, _imageAlign, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
 
@@ -765,7 +929,9 @@ namespace C1FlexGridStyleHandler
     {
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.ImageAlign,
-        COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, _imageAlign, TEXT_DIRECTION_UNSPECIFIED, FORMAT_UNSPECIFIED);
     }
     #endregion
@@ -821,6 +987,7 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextDirection,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, _textDirection, FORMAT_UNSPECIFIED);
     }
 
@@ -836,14 +1003,16 @@ namespace C1FlexGridStyleHandler
     {
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.TextDirection,
-        COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, _textDirection, FORMAT_UNSPECIFIED);
     }
     #endregion
 
     #region Set/Merge Format
     /// <summary>
-    /// Set the WordWrap to a cell.
+    /// Set the data Format to a cell.
     /// </summary>
     /// <param name="_intRow"></param>
     /// <param name="_intCol"></param>
@@ -855,7 +1024,7 @@ namespace C1FlexGridStyleHandler
     }
 
     /// <summary>
-    /// Takes the style information from the cell at (col/row) and merges it with the specified WordWrap.
+    /// Takes the style information from the cell at (col/row) and merges it with the specified data Format.
     /// </summary>
     /// <param name="_intRow"></param>
     /// <param name="_intCol"></param>
@@ -867,7 +1036,7 @@ namespace C1FlexGridStyleHandler
     }
 
     /// <summary>
-    /// Takes the style information from the cell at (col/row) and merges it with the specified WordWrap.
+    /// Takes the style information from the cell at (col/row) and merges it with the specified data Format.
     /// </summary>
     /// <param name="_intRow"></param>
     /// <param name="_strCol"></param>
@@ -880,7 +1049,7 @@ namespace C1FlexGridStyleHandler
     }
 
     /// <summary>
-    /// Set the WordWrap to a cell range
+    /// Set the data Format to a cell range
     /// </summary>
     /// <param name="_intRow1"></param>
     /// <param name="_intCol1"></param>
@@ -893,11 +1062,12 @@ namespace C1FlexGridStyleHandler
       this.SetStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Format,
         COLOR_UNSPECIFIED,
         COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, _strFormat);
     }
 
     /// <summary>
-    /// Takes the style information from the cell at (col 1/row 1) and merges it with the specified WordWrap.
+    /// Takes the style information from the cell at (col 1/row 1) and merges it with the specified data Format.
     /// </summary>
     /// <param name="_intRow1"></param>
     /// <param name="_intCol1"></param>
@@ -908,7 +1078,9 @@ namespace C1FlexGridStyleHandler
     {
       //Use common "MergeStyle" method.
       this.MergeStyle(_intRow1, _intCol1, _intRow2, _intCol2, StyleElementFlags.Format,
-        COLOR_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, 
+        COLOR_UNSPECIFIED, BORDERDIRECTION_UNSPECIFIED, BORDERSTYLE_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
+        COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED, COLOR_UNSPECIFIED, BORDERWIDTH_UNSPECIFIED,
         FONT_UNSPECIFIED, COLOR_UNSPECIFIED, TEXT_ALIGN_UNSPECIFIED, WORD_WRAP_UNSPECIFIED, IMAGE_ALIGN_UNSPECIFIED, TEXT_DIRECTION_UNSPECIFIED, _strFormat);
     }
     #endregion
@@ -926,9 +1098,19 @@ namespace C1FlexGridStyleHandler
     /// All elements which are not set can have any value.</param>
     /// <param name="_backColor"></param>
     /// <param name="_borderDirection"></param>
-    /// <param name="_borderColor"></param>
-    /// <param name="_borderStyle"></param>
-    /// <param name="_intBorderWidth"></param>
+    /// <param name="_borderColor">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border color.</param>
+    /// <param name="_borderStyle">Style of the border</param>
+    /// <param name="_intBorderWidth">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border with.</param>
+    /// <param name="_borderColorHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border width</param>
+    /// <param name="_borderColorVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border width</param>
     /// <param name="_font"></param>
     /// <param name="_foreColor"></param>
     /// <param name="_textAlign">Text Align</param>
@@ -939,6 +1121,7 @@ namespace C1FlexGridStyleHandler
     public void SetStyle(int _intRow1, int _intCol1, int _intRow2, int _intCol2, StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
       TextDirectionEnum _textDirection, string _format)
     {
@@ -967,6 +1150,7 @@ namespace C1FlexGridStyleHandler
 
           this.SetStyle(cellStyle, iIndexRow, iIndexCol, _styleElementFlags, _backColor,
             _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
+            _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical,
             _font, _foreColor, _textAlign, _bolWordWrap, _imageAlign, _textDirection, _format);
         }
       }
@@ -984,9 +1168,19 @@ namespace C1FlexGridStyleHandler
     /// All elements which are not set can have any value.</param>
     /// <param name="_backColor"></param>
     /// <param name="_borderDirection"></param>
-    /// <param name="_borderColor"></param>
-    /// <param name="_borderStyle"></param>
-    /// <param name="_intBorderWidth"></param>
+    /// <param name="_borderColor">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border color.</param>
+    /// <param name="_borderStyle">Style of the border</param>
+    /// <param name="_intBorderWidth">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border with.</param>
+    /// <param name="_borderColorHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border width</param>
+    /// <param name="_borderColorVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border width</param>
     /// <param name="_font"></param>
     /// <param name="_foreColor"></param>
     /// <param name="_textAlign">Text Align </param>
@@ -997,6 +1191,7 @@ namespace C1FlexGridStyleHandler
     public void MergeStyle(int _intRow1, int _intCol1, int _intRow2, int _intCol2, StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
       TextDirectionEnum _textDirection, string _format)
     {
@@ -1058,11 +1253,16 @@ namespace C1FlexGridStyleHandler
           Color backColorCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.BackColor) == StyleElementFlags.BackColor) ? cellStyleCurrent.BackColor : COLOR_UNSPECIFIED);
           Color foreColorCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.ForeColor) == StyleElementFlags.ForeColor) ? cellStyleCurrent.ForeColor : COLOR_UNSPECIFIED);
           Font fontCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.Font) == StyleElementFlags.Font) ? cellStyleCurrent.Font : FONT_UNSPECIFIED);
-          //Für die Border viel Tipparbeit...
+          
+          //Border: a lot of variables:
           Color borderColorCurrentStyle;
           BorderDirEnum borderDirectionCurrentStyle;
           BorderStyleEnum borderStyleCurrentStyle;
           int intBorderWidthCurrentStyle;
+          Color borderColorHorizontalCurrentStyle;
+          int intBorderWidthHorizontalCurrentStyle;
+          Color borderColorVerticalCurrentStyle;
+          int intBorderWidthVerticalCurrentStyle;
           if ((styleElementFlagsCurrentStyle & StyleElementFlags.Border) == StyleElementFlags.Border)
           {
             CellBorder border = cellStyleCurrent.Border;
@@ -1070,6 +1270,11 @@ namespace C1FlexGridStyleHandler
             borderDirectionCurrentStyle = border.Direction;
             borderStyleCurrentStyle = border.Style;
             intBorderWidthCurrentStyle = border.Width;
+
+            borderColorHorizontalCurrentStyle = border.HorizontalColor;
+            intBorderWidthHorizontalCurrentStyle = border.HorizontalWidth;
+            borderColorVerticalCurrentStyle = border.VerticalColor;
+            intBorderWidthVerticalCurrentStyle = border.VerticalWidth;
           }
           else
           {
@@ -1077,6 +1282,11 @@ namespace C1FlexGridStyleHandler
             borderDirectionCurrentStyle = BORDERDIRECTION_UNSPECIFIED;
             borderStyleCurrentStyle = BORDERSTYLE_UNSPECIFIED;
             intBorderWidthCurrentStyle = BORDERWIDTH_UNSPECIFIED;
+
+            borderColorHorizontalCurrentStyle  = COLOR_UNSPECIFIED;
+            intBorderWidthHorizontalCurrentStyle = BORDERWIDTH_UNSPECIFIED;
+            borderColorVerticalCurrentStyle = COLOR_UNSPECIFIED;
+            intBorderWidthVerticalCurrentStyle = BORDERWIDTH_UNSPECIFIED;
           }
           TextAlignEnum textAlignCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.TextAlign) == StyleElementFlags.TextAlign) ? cellStyleCurrent.TextAlign : TEXT_ALIGN_UNSPECIFIED);
           bool bolWordWrapCurrentStyle = (((styleElementFlagsCurrentStyle & StyleElementFlags.WordWrap) == StyleElementFlags.WordWrap) ? cellStyleCurrent.WordWrap : WORD_WRAP_UNSPECIFIED);
@@ -1090,6 +1300,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.BackColor | StyleElementFlags.ForeColor | styleElementFlagsCurrentStyle,
               _backColor,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               fontCurrentStyle, _foreColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           else
@@ -1101,6 +1312,7 @@ namespace C1FlexGridStyleHandler
               this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.BackColor | styleElementFlagsCurrentStyle,
                 _backColor,
                 borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+                borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
                 cellStyleCurrent.Font, cellStyleCurrent.ForeColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
             }
             if ((_styleElementFlags & StyleElementFlags.ForeColor) == StyleElementFlags.ForeColor)
@@ -1109,15 +1321,17 @@ namespace C1FlexGridStyleHandler
               this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.ForeColor | styleElementFlagsCurrentStyle,
                 backColorCurrentStyle,
                 borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+                borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
                 fontCurrentStyle, _foreColor, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
             }
           }
           if ((_styleElementFlags & StyleElementFlags.Border) == StyleElementFlags.Border)
           {
-            //Border: may be 4 values:
+            //Border: may be 4 values (or more for BorderDirEnum.BothDifferent):
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.Border | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
+              _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical,
               fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if ((_styleElementFlags & StyleElementFlags.Font) == StyleElementFlags.Font)
@@ -1126,6 +1340,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.Font | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               _font, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
 
@@ -1135,6 +1350,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.TextAlign | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               fontCurrentStyle, foreColorCurrentStyle, _textAlign, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if ((_styleElementFlags & StyleElementFlags.WordWrap) == StyleElementFlags.WordWrap)
@@ -1143,6 +1359,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.WordWrap | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, _bolWordWrap, imageAlignCurrentStyle, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if ((_styleElementFlags & StyleElementFlags.ImageAlign) == StyleElementFlags.ImageAlign)
@@ -1151,6 +1368,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.ImageAlign | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, _imageAlign, textDirectionCurrentStyle, formatCurrentStyle);
           }
           if (_styleElementFlags.HasFlag(StyleElementFlags.TextDirection) == true)
@@ -1159,6 +1377,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.TextDirection | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, _textDirection, formatCurrentStyle);
           }
           if (_styleElementFlags.HasFlag(StyleElementFlags.Format) == true)
@@ -1167,6 +1386,7 @@ namespace C1FlexGridStyleHandler
             this.SetStyle(cellStyleCurrent, iIndexRow, iIndexCol, StyleElementFlags.Format | styleElementFlagsCurrentStyle,
               backColorCurrentStyle,
               borderColorCurrentStyle, borderDirectionCurrentStyle, borderStyleCurrentStyle, intBorderWidthCurrentStyle,
+              borderColorHorizontalCurrentStyle, intBorderWidthHorizontalCurrentStyle, borderColorVerticalCurrentStyle, intBorderWidthVerticalCurrentStyle,
               fontCurrentStyle, foreColorCurrentStyle, textAlignCurrentStyle, bolWordWrapCurrentStyle, imageAlignCurrentStyle, textDirectionCurrentStyle, _format);
           }
           #endregion
@@ -1188,9 +1408,19 @@ namespace C1FlexGridStyleHandler
     /// All elements which are not set can have any value.</param>
     /// <param name="_backColor"></param>
     /// <param name="_borderDirection"></param>
-    /// <param name="_borderColor"></param>
-    /// <param name="_borderStyle"></param>
-    /// <param name="_intBorderWidth"></param>
+    /// <param name="_borderColor">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border color.</param>
+    /// <param name="_borderStyle">Style of the border</param>
+    /// <param name="_intBorderWidth">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border with.</param>
+    /// <param name="_borderColorHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border width</param>
+    /// <param name="_borderColorVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border width</param>
     /// <param name="_font"></param>
     /// <param name="_foreColor"></param>
     /// <param name="_textAlign">Text Align</param>
@@ -1201,12 +1431,14 @@ namespace C1FlexGridStyleHandler
     private void SetStyle(CellStyle _cellStyleBasedOn, int _intRow1, int _intCol1, StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
       TextDirectionEnum _textDirection, string _format)
     {
       //Create the style name:
       string strStyleName = this.GetStyleString(_styleElementFlags, _backColor,
         _borderColor, _borderDirection, _borderStyle, _intBorderWidth,
+        _borderColorHorizontal, _intBorderWidthHorizontal, _borderColorVertical, _intBorderWidthVertical,
         _font, _foreColor, _textAlign, _bolWordWrap, _imageAlign, _textDirection, _format);
 
 
@@ -1238,6 +1470,11 @@ namespace C1FlexGridStyleHandler
           cellStyleNew.Border.Direction = _borderDirection;
           cellStyleNew.Border.Style = _borderStyle;
           cellStyleNew.Border.Width = _intBorderWidth;
+
+          cellStyleNew.Border.HorizontalColor = _borderColorHorizontal;
+          cellStyleNew.Border.HorizontalWidth = _intBorderWidthHorizontal;
+          cellStyleNew.Border.VerticalColor = _borderColorVertical;
+          cellStyleNew.Border.VerticalWidth = _intBorderWidthVertical;
         }
         if ((_styleElementFlags & StyleElementFlags.Font) == StyleElementFlags.Font)
           cellStyleNew.Font = _font;
@@ -1280,9 +1517,19 @@ namespace C1FlexGridStyleHandler
     /// <param name="_styleElementFlags">Defined elements. All others are not honoured!</param>
     /// <param name="_backColor"></param>
     /// <param name="_borderDirection"></param>
-    /// <param name="_borderColor"></param>
-    /// <param name="_borderStyle"></param>
-    /// <param name="_intBorderWidth"></param>
+    /// <param name="_borderColor">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border color.</param>
+    /// <param name="_borderStyle">Style of the border</param>
+    /// <param name="_intBorderWidth">If <paramref name="_borderDirection"/> is not <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the border with.</param>
+    /// <param name="_borderColorHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border color</param>
+    /// <param name="_intBorderWidthHorizontal">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the horizontal border width</param>
+    /// <param name="_borderColorVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border color</param>
+    /// <param name="_intBorderWidthVertical">If <paramref name="_borderDirection"/> = <see cref="BorderDirEnum.BothDifferent"/>,
+    /// this is the vertical border width</param>
     /// <param name="_font"></param>
     /// <param name="_foreColor"></param>
     /// <param name="_textAlign">Text Align</param>
@@ -1294,6 +1541,7 @@ namespace C1FlexGridStyleHandler
     protected string GetStyleString(StyleElementFlags _styleElementFlags,
       Color _backColor,
       Color _borderColor, BorderDirEnum _borderDirection, BorderStyleEnum _borderStyle, int _intBorderWidth,
+      Color _borderColorHorizontal, int _intBorderWidthHorizontal, Color _borderColorVertical, int _intBorderWidthVertical,
       Font _font, Color _foreColor, TextAlignEnum _textAlign, bool _bolWordWrap, ImageAlignEnum _imageAlign,
       TextDirectionEnum _textDirection, string _format)
     {
@@ -1311,17 +1559,35 @@ namespace C1FlexGridStyleHandler
       }
       if ((_styleElementFlags & StyleElementFlags.Border) == StyleElementFlags.Border)
       {
-        //Border: may be 4 values:
-        sb.Append(STYLENAME_SEPARATOR);
-        C1FlexGridStyleHandler.ColorToStringBuilder(_borderColor, sb);
-        sb.Append(STYLENAME_SEPARATOR);
-        //sb.Append (_borderDirection.ToString() );
-        sb.Append(((int)_borderDirection).ToString());
-        sb.Append(STYLENAME_SEPARATOR);
-        //sb.Append (_borderStyle.ToString() );
-        sb.Append(((int)_borderStyle).ToString());
-        sb.Append(STYLENAME_SEPARATOR);
-        sb.Append(_intBorderWidth.ToString());
+        //Border:
+        if (_borderDirection != BorderDirEnum.BothDifferent)
+        {
+          //One border width and color for vertical/horizontal: store 4 values:
+          sb.Append(STYLENAME_SEPARATOR);
+          C1FlexGridStyleHandler.ColorToStringBuilder(_borderColor, sb);
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(((int)_borderDirection).ToString());
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(((int)_borderStyle).ToString());
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(_intBorderWidth.ToString());
+        }
+        else
+        {
+          //"BothDifferent": Color and width from two different properties:
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(((int)_borderDirection).ToString());
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(((int)_borderStyle).ToString());
+          sb.Append(STYLENAME_SEPARATOR);
+          C1FlexGridStyleHandler.ColorToStringBuilder(_borderColorVertical, sb);
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(_intBorderWidthVertical.ToString());
+          sb.Append(STYLENAME_SEPARATOR);
+          C1FlexGridStyleHandler.ColorToStringBuilder(_borderColorHorizontal, sb);
+          sb.Append(STYLENAME_SEPARATOR);
+          sb.Append(_intBorderWidthHorizontal.ToString());
+        }
       }
       if ((_styleElementFlags & StyleElementFlags.Font) == StyleElementFlags.Font)
       {

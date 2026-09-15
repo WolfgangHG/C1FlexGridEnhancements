@@ -1,6 +1,6 @@
 # C1FlexGrid enhancements: StyleHandler (.NET 4.8 and .NET 8)
 
-This sample contains a helper class that simplies cell formatting of a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
+This sample contains a helper class that simplifies cell formatting of a ComponentOne C1FlexGrid (https://www.grapecity.com/componentone/winforms-ui-controls)
 
 It supports C1FlexGrid for .NET framework 4.8 and for .NET 8.
 
@@ -23,14 +23,14 @@ for each possible combination.
 
 To simplify this, this sample contains a helper class `C1FlexGridStyleHandler`.
 
-The result looks like this:
+The sample form looks like this:
 
 ![StyleHandler](stylehandler.png)
 
 The style handler can handle those formattings:
 * ForeColor
 * BackColor
-* Borders (style, width, color)
+* Borders (style, width, color, and it is also possible to set different vertical and horizontal borders)
 * Font
 * TextAlign
 * WordWrap
@@ -42,12 +42,30 @@ The StyleHandler is just a helper class to create CellStyle objects based on a f
 It calculates style names based on the formatting information, checks whether a style with this name is already
 contained in the grid, and adds it if not.
 
-The style names have this structure:
+The style names have this structure (everything in angle brackets is a value from the CellSty,e
+chars like "/" and "[" and "]" are written "as is" to the string):
 ~~~~
-<StyleElementFlags enum as integer>/<BackColor>/<BorderColor>/<BorderDirection>/<BorderStyle>/<BorderWidth>/<FontName>[Size]<FontStyle>/<ForeColor>/<TextAlignEnum as int>/<WordWrap>/<ImageAlignEnum as int>/<TextDirectionEnum as int>
+<StyleElementFlags as int>/
+<BackColor>/
+<BorderColor>/
+<BorderDirection as int>/
+<BorderStyle as int>/
+<BorderWidth>/
+<BorderColorVertical>/
+<BorderWidthVertical>/
+<BorderColorHorizontal>/
+<BorderWidthHorizontal>/
+<FontName>[<FontSize>]<FontStyle as int>/<ForeColor>/
+<TextAlignEnum as int>/
+<WordWrap>/
+<ImageAlignEnum as int>/
+<TextDirectionEnum as int>
 ~~~~
 
 Only the modified values are contained in the string, so that it is much shorter if only the ForeColor is set.
+For Borders, the string depends on the `BorderDirection`: if it is not `BothDifferent`, the values `BorderColor` and `BorderWidth` are written, but not 
+`BorderColorVertical`, `BorderWidthVertical`, `BorderColorHorizontal` and `BorderWidthHorizontal`. Vice versa for `BorderDirection` = `BothDifferent`.
+
 
 If you first set the ForeColor ("styleHandler.MergeForeColor"), then the font ("styleHandler.MergeFont"), actually two styles are created:  
 The first style is named "4/RR,GG,BB" (where "4" is `StyleElementFlags.ForeColor`, followed by the RGB value of the color)  
@@ -107,4 +125,12 @@ styleHandler.MergeBorder(13, 1, Color.Green, BorderDirEnum.Vertical, BorderStyle
 
 //Auto size the row - do this after applying the border, as the border width "2" affects the row height:
 this.c1FlexGrid1.AutoSizeRow(13);
+
+//Set a border with "BothDifferent" direction:
+//Build a "cross" with different color in horizontal and vertical bar:
+styleHandler.MergeBorderBothDifferent(10, 5, BorderStyleEnum.Flat, Color.Green, 2, Color.Red, 1);
+//Vertical border shall be the normal style border here:
+styleHandler.MergeBorderBothDifferent(10, 6, BorderStyleEnum.Flat, Color.Green, 2, this.c1FlexGrid1.Styles.Normal.Border.Color, this.c1FlexGrid1.Styles.Normal.Border.Width);
+//The bottom line just has a vertical border, the bottom horizontal border is the grid line style:
+styleHandler.MergeBorderBothDifferent(11, 5, BorderStyleEnum.Flat, this.c1FlexGrid1.Styles.Normal.Border.Color, this.c1FlexGrid1.Styles.Normal.Border.Width, Color.Red, 1);
 ~~~~

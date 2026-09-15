@@ -13,8 +13,14 @@ using System.Windows.Forms;
 
 namespace C1FlexGridStyleHandler
 {
+  /// <summary>
+  /// Sample form
+  /// </summary>
   public partial class Form : System.Windows.Forms.Form
   {
+    /// <summary>
+    /// ctor
+    /// </summary>
     public Form()
     {
 #if NET48
@@ -74,6 +80,15 @@ namespace C1FlexGridStyleHandler
 
       //Auto size the row - do this after applying the border, as the border width "2" affects the row height:
       this.c1FlexGrid1.AutoSizeRow(13);
+
+      //Set a border with "BothDifferent" direction:
+      //Build a "cross" with different color in horizontal and vertical bar:
+      styleHandler.MergeBorderBothDifferent(10, 5, BorderStyleEnum.Flat, Color.Green, 2, Color.Red, 1);
+      //Vertical border shall be the normal style border here:
+      styleHandler.MergeBorderBothDifferent(10, 6, BorderStyleEnum.Flat, Color.Green, 2, this.c1FlexGrid1.Styles.Normal.Border.Color, this.c1FlexGrid1.Styles.Normal.Border.Width);
+      //The bottom line just has a vertical border, the bottom horizontal border is the grid line style:
+      styleHandler.MergeBorderBothDifferent(11, 5, BorderStyleEnum.Flat, this.c1FlexGrid1.Styles.Normal.Border.Color, this.c1FlexGrid1.Styles.Normal.Border.Width, Color.Red, 1);
+
     }
   }
 }
