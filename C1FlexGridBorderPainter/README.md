@@ -35,7 +35,7 @@ Same for a left border: create a style with only a right border ("Border.Directi
 This approach has the limitation that you cannot use different border types for left and bottom border of the cell.
 
 For example, you will loose the horizontal grid line in the cell to the left border of this sample rectangle
-(between cells 7/3 and 8/3):
+(between cells 7/2 and 8/2):
 
 ![BorderPainter](images/limitation.png)
 
@@ -44,7 +44,7 @@ For example, you will loose the horizontal grid line in the cell to the left bor
 Since `C1FlexGrid` .657, the `BorderDirEnum` enum has one more value `BothDifferent`, and you can set
 different borders for right (properties `VerticalColor` and `VerticalWidth`) and bottom border (properties `HorizontalColor` and `HorizontalWidth`).
 
-In the previous limitation sample, you have to apply the default grid border color to the horizontal border of the cell.
+With this feature, you can overcome the limitation of the previous sample: you have to apply the default grid border color to the horizontal border of the cell 7/2.
 
 Here is a sample code snippet that is also used in my sample:
 
