@@ -1,11 +1,8 @@
 ﻿using C1.Win.FlexGrid;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace C1FlexGridCopyOffice
@@ -685,13 +682,14 @@ namespace C1FlexGridCopyOffice
     /// </summary>
     /// <param name="_style"></param>
     /// <param name="_bolCreateBorderBottom">TRUE: set Bottom Borders according to the Definition in CellStyle for "bottom".
-    /// FALSE: don't set because a BorderPainter defines it differently.</param>
+    /// FALSE: don't set because a BorderPainter defines it differently (this feature is not used in this sample).</param>
     /// <param name="_bolCreateBorderTop">TRUE: set Top Borders according to the Definition in CellStyle for "bottom" (ONLY relevant for fixed cells!)
     /// FALSE: don't set because a BorderPainter defines it differently, or set the border only below (relevant for "normal" cells)</param>
     /// <param name="_bolCreateBorderRight">TRUE: set Right Borders according to the Definition in CellStyle for "right".
     /// FALSE: don't set because a BorderPainter defines it differently.</param>
     /// <param name="_bolCreateBorderLeft">TRUE: set Left Borders according to the Definition in CellStyle for "ight" (ONLY relevant for fixed cells!)
-    /// FALSE: don't set because a BorderPainter defines it differently, or set the border only right (relevant for "normal" cells)</param>
+    /// FALSE: don't set because a BorderPainter defines it differently, or set the border only right (relevant for "normal" cells)
+    /// (this feature is not used in this sample)</param>
     /// <returns></returns>
     private static string GetBorderStyleCSS(CellStyle _style, bool _bolCreateBorderTop, bool _bolCreateBorderLeft, bool _bolCreateBorderBottom, bool _bolCreateBorderRight)
     {
@@ -699,35 +697,73 @@ namespace C1FlexGridCopyOffice
 
       string strStyleData = string.Empty;
 
-      //Create color string:
-      string strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.Border.Color.ToArgb()));
-
       //C1Flexgrid can only define borders to the right and below, so apply it similar.
-      if (_style.Border.Direction == BorderDirEnum.Horizontal || _style.Border.Direction == BorderDirEnum.Both)
+      if (_style.Border.Direction == BorderDirEnum.Horizontal || _style.Border.Direction == BorderDirEnum.Both || _style.Border.Direction == BorderDirEnum.BothDifferent)
       {
-        //Width: the value "0.5pt" seems to match the thin Border of Excel.
-        //"0.5px" (0,5 Pixel?) does not work, so Point seems to be better.
+        //Create color string:
+        string strColor;
+        if (_style.Border.Direction == BorderDirEnum.BothDifferent)
+        {
+          //Convert color value to ARGB value and back to color. This way, the HTML color name is not set, but a RGB value.
+          //"ControlDark" results in "buttonshadow" instead of "#A0A0A0"
+          strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.Border.HorizontalColor.ToArgb()));
+        }
+        else
+        {
+          strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.Border.Color.ToArgb()));
+        }
+
+
+        string strWidth;
+        if (_style.Border.Direction == BorderDirEnum.BothDifferent)
+        {
+          strWidth = ConvertBorderWidth(_style.Border.HorizontalWidth);
+        }
+        else
+        {
+          strWidth = ConvertBorderWidth(_style.Border.Width);
+        }
 
         //For fixed cells, I have to also set the top/left border, otherwise fixed borders will not work in Excel.
         //But only create top/left, if the parameter says so (this is relevant if the border results from a BorderPainter).
         if (_bolCreateBorderBottom == true)
         {
-          strStyleData += $"border-bottom: solid {strColor} 0.5pt;";
+          strStyleData += $"border-bottom: solid {strColor} {strWidth};";
         }
         if (_bolCreateBorderTop == true)
         {
-          strStyleData += $"border-top: solid {strColor} 0.5pt;";
+          strStyleData += $"border-top: solid {strColor} {strWidth};";
         }
       }
-      if (_style.Border.Direction == BorderDirEnum.Vertical || _style.Border.Direction == BorderDirEnum.Both)
+      if (_style.Border.Direction == BorderDirEnum.Vertical || _style.Border.Direction == BorderDirEnum.Both || _style.Border.Direction == BorderDirEnum.BothDifferent)
       {
+        string strColor;
+        if (_style.Border.Direction == BorderDirEnum.BothDifferent)
+        {
+          strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.Border.VerticalColor.ToArgb()));
+        }
+        else
+        {
+          strColor = ColorTranslator.ToHtml(Color.FromArgb(_style.Border.Color.ToArgb()));
+        }
+
+        string strWidth;
+        if (_style.Border.Direction == BorderDirEnum.BothDifferent)
+        {
+          strWidth = ConvertBorderWidth(_style.Border.VerticalWidth);
+        }
+        else
+        {
+          strWidth = ConvertBorderWidth(_style.Border.Width);
+        }
+
         if (_bolCreateBorderLeft == true)
         {
-          strStyleData += $"border-left: solid {strColor} 0.5pt;";
+          strStyleData += $"border-left: solid {strColor} {strWidth};";
         }
         if (_bolCreateBorderRight == true)
         {
-          strStyleData += $"border-right: solid {strColor} 0.5pt;";
+          strStyleData += $"border-right: solid {strColor} {strWidth};";
         }
       }
 
@@ -753,6 +789,45 @@ namespace C1FlexGridCopyOffice
       html.Replace(Environment.NewLine, "<br>");
 
       return html.ToString();
+    }
+
+    /// <summary>
+    /// Convert FlexGrid border width to a point width that is somehow OK in Excel and Word.
+    /// This does not work perfect for both, so you might have to change the code for e.g. width "2".
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// From here: 
+    /// https://learn.microsoft.com/en-us/answers/questions/4840246/printed-thickness-of-cell-borders-in-excel
+    /// 
+    ///  I printed out borders in Word with each of the available widths:  wdLineWidth025Pt, wdLineWidth050Pt, wdLineWidth075Pt, 
+    ///  wdLineWidth100Pt, wdLineWidth150Pt, wdLineWidth225Pt, wdLineWidth300Pt, wdLineWidth450Pt, wdLineWidth600Pt
+    ///  The prints were done on the same printer.Then I visually compared the thicknesses.
+    ///  
+    ///  xlHairline appears to be the same as wdLineWidth025Pt
+    ///  xlThin appears to be the same as wdLineWidth100Pt
+    ///  xlMedium appears to be thicker than wdLineWidth150Pt but thinner than wdLineWidth225Pt
+    ///  xlThick appears to be the same as wdLineWidth300Pt
+    /// </remarks>
+    /// <param name="width"></param>
+    /// <returns></returns>
+    private static string ConvertBorderWidth(int width)
+    {
+      if (width == 1)
+      {
+        //Becomes "xlThin" in Ecel (not "hairline")
+        return "0.5pt";
+      }
+      else if (width == 2)
+      {
+        //Slightly wider in Excel. In Word, it does not look so well.
+        return "1pt";
+      }
+      else
+      {
+        //Bigger width: use it as "point" value..
+        return width.ToString(cultureInfoEnglish) + "pt";
+      }
     }
     #endregion
   }

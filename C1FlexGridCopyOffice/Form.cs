@@ -117,6 +117,19 @@ namespace C1FlexGridCopyOffice
       this.c1FlexGrid.SetCellStyle(8, 3, styleBorder);
       this.c1FlexGrid.SetCellStyle(8, 4, styleBorder);
 
+
+      //Use the "BothDifferent" border from C1FlexGrid since 8.0.20241.657:
+      CellStyle styleBorderBothDifferent = this.c1FlexGrid.Styles.Add("BorderBothDifferent", this.c1FlexGrid.Styles.Normal);
+      styleBorderBothDifferent.Border.Style = BorderStyleEnum.Flat;
+      styleBorderBothDifferent.Border.Direction = BorderDirEnum.BothDifferent;
+      styleBorderBothDifferent.Border.HorizontalColor = Color.Green;
+      styleBorderBothDifferent.Border.HorizontalWidth = 2;
+      styleBorderBothDifferent.Border.VerticalColor = Color.Blue;
+      styleBorderBothDifferent.Border.VerticalWidth= 2;
+      this.c1FlexGrid.SetCellStyle(14, 2, styleBorderBothDifferent);
+      //this.c1FlexGrid.SetCellStyle(8, 3, styleBorder);
+      //this.c1FlexGrid.SetCellStyle(8, 4, styleBorder);
+
       //Merge some cells:
       this.c1FlexGrid.MergedRanges.Add(this.c1FlexGrid.GetCellRange(10, 2, 12, 4));
       //Also merge fixed cells:

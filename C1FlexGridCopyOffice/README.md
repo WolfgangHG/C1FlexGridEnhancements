@@ -15,7 +15,7 @@ It supports C1FlexGrid for .NET framework 4.8 and for .NET 8.
 * The entire grid can also be saved to html
 * Supported cell style formatting: forecolor, backcolor, font (font family and font size are only applied if they are not the C1FlexGrid Defaults)
 * merged ranges are supported
-* borders are supported - but just basic support, e.g. no width and no border styles.  
+* borders are supported (including `BorderDirEnum.BothDifferent`) - but no border styles. The border width is also applied, but will behave differently when pasting to Excel or Word.
 The sample contains code to also support the [C1FlexGridBorderPainter](../C1FlexGridBorderPainter), but this code is commented.
 * column widths - but see below for limitations
 * all cell data is copied as string (cell format is set to "@" - relevant for excel paste)
@@ -23,6 +23,21 @@ The sample contains code to also support the [C1FlexGridBorderPainter](../C1Flex
 
 Limitations:
 * when pasting to Excel, the column widths are ignored. I did not find a way to apply them... Outlook and Word work.
+* a border width greater than "1" looks differently in Word and Excel, no matter what width I choose. Excel has only for fixed width types, and by converting the C1FlexGrid width "1 pixel" to "0.5pt", it results in excel border
+type `xlThin` (a bit wider than `xlHairline`), the width "2 pixel" is written as "1pt", which results in `xlMedium`, and everything wider is written "as is" to the style, so it results in `xlThick`.
+For Word, "1pt" looks too thin, so another point value might be more appropriate here.
+
+  I found a post at https://learn.microsoft.com/en-us/answers/questions/4840246/printed-thickness-of-cell-borders-in-excel which states:
+   
+  *I printed out borders in Excel with each of the available widths:  xlHairline, xlThin, xlMedium, xlThick*
+  
+  *I printed out borders in Word with each of the available widths:  wdLineWidth025Pt, wdLineWidth050Pt, wdLineWidth075Pt, wdLineWidth100Pt, wdLineWidth150Pt, wdLineWidth225Pt, wdLineWidth300Pt, wdLineWidth450Pt, wdLineWidth600Pt
+  The prints were done on the same printer.  Then I visually compared the thicknesses.*
+
+  * *xlHairline appears to be the same as wdLineWidth025Pt*
+  * *xlThin appears to be the same as wdLineWidth100Pt*
+  * *xlMedium appears to be thicker than wdLineWidth150Pt but thinner than wdLineWidth225Pt*
+  * *xlThick appears to be the same as wdLineWidth300Pt*
 
 ## How it works
 Each C1FlexGrid CellStyle is converted to a css style, where the "DefinedElements" enum defines which attributs of the
